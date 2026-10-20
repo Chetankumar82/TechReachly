@@ -70,10 +70,10 @@ export const Navbar = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-200 ${
+      className={`sticky top-0 z-50 w-full transition-all duration-200 ${
         scrolled
-          ? 'bg-white/85 dark:bg-[#09090b]/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-zinc-800/80 shadow-md shadow-slate-900/5 dark:shadow-black/25'
-          : 'bg-white/75 dark:bg-[#09090b]/75 backdrop-blur-md border-b border-slate-200/60 dark:border-zinc-800/60'
+          ? 'bg-white/90 dark:bg-[#09090b]/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-zinc-800/80 shadow-md shadow-slate-900/5 dark:shadow-black/30'
+          : 'bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-md border-b border-slate-200/60 dark:border-zinc-800/60'
       }`}
     >
       {/* Top Fiber-Optic Gradient Sheen Line */}

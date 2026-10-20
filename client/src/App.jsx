@@ -29,7 +29,7 @@ const ProtectedLayout = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen saas-bg text-slate-900 dark:text-zinc-100 flex flex-col antialiased transition-colors duration-200 relative overflow-x-hidden">
+    <div className="min-h-screen saas-bg text-slate-900 dark:text-zinc-100 flex flex-col antialiased transition-colors duration-200 relative">
       {/* Ambient background glow accents for modern SaaS depth */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 pointer-events-none opacity-40 dark:opacity-25 overflow-hidden -z-0">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[760px] h-[380px] bg-gradient-to-b from-indigo-500/20 via-violet-500/10 to-transparent blur-3xl rounded-full" />
