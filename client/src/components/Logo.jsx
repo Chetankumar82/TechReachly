@@ -127,33 +127,33 @@ export function LogoMark({ className = 'w-6 h-6', animated = true, ...props }) {
  */
 export function LogoSquircle({ size = 'md', animated = true, className = '' }) {
   const sizeMap = {
-    sm: 'w-8 h-8 rounded-lg p-1.5',
-    md: 'w-10 h-10 rounded-xl p-2',
-    lg: 'w-12 h-12 rounded-2xl p-2.5',
-    xl: 'w-16 h-16 rounded-[22px] p-3.5',
+    sm: { container: 'w-8 h-8 rounded-lg p-1.5', radius: 'rounded-lg' },
+    md: { container: 'w-9 h-9 rounded-xl p-2', radius: 'rounded-xl' },
+    lg: { container: 'w-11 h-11 rounded-2xl p-2.5', radius: 'rounded-2xl' },
+    xl: { container: 'w-16 h-16 rounded-[22px] p-3.5', radius: 'rounded-[22px]' },
   };
 
-  const containerClasses = sizeMap[size] || sizeMap.md;
+  const conf = sizeMap[size] || sizeMap.md;
 
   return (
-    <div className={`relative flex items-center justify-center flex-shrink-0 group/squircle ${className}`}>
-      {/* Ambient Multi-Stop Glowing Aura */}
+    <div className={`relative flex items-center justify-center flex-shrink-0 ${className}`}>
+      {/* Ambient Multi-Stop Glowing Aura with Matching Rounded Geometry */}
       {animated && (
         <div
-          className={`absolute -inset-1 rounded-[inherit] bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 opacity-40 blur-md group-hover:opacity-85 group-hover:scale-110 transition-all duration-500 pointer-events-none animate-reach-ambient`}
+          className={`absolute -inset-0.5 ${conf.radius} bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 opacity-40 blur-sm group-hover:opacity-85 transition-opacity duration-300 pointer-events-none animate-reach-ambient`}
         />
       )}
 
       {/* Main Squircle Container */}
       <div
-        className={`relative flex items-center justify-center bg-gradient-to-br from-slate-900 via-zinc-950 to-[#060E20] border border-slate-700/50 dark:border-zinc-800 shadow-md shadow-indigo-500/15 group-hover:shadow-indigo-500/30 group-hover:border-indigo-400/50 group-hover:scale-[1.03] transition-all duration-300 ${containerClasses}`}
+        className={`relative flex items-center justify-center bg-gradient-to-br from-slate-900 via-zinc-950 to-[#060E20] border border-slate-700/50 dark:border-zinc-800 shadow-md shadow-indigo-500/15 group-hover:border-indigo-400/50 transition-all duration-300 ${conf.container}`}
       >
         {/* Subtle Glass Surface Reflection Top Gradient */}
-        <div className="absolute inset-0 rounded-[inherit] bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
+        <div className={`absolute inset-0 ${conf.radius} bg-gradient-to-b from-white/15 to-transparent pointer-events-none`} />
 
         <LogoMark
           animated={animated}
-          className="w-full h-full relative z-10 drop-shadow-[0_2px_10px_rgba(79,70,229,0.45)]"
+          className="w-full h-full relative z-10 drop-shadow-[0_2px_8px_rgba(79,70,229,0.4)]"
         />
       </div>
     </div>
