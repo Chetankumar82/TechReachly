@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TechReachly — Sign In | Algorithmic Precision for High-Velocity Sourcing</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#6001d1",
+            "on-secondary-fixed-variant": "#5a00c6",
+            "surface-container-lowest": "#060e20",
+            "surface-container-high": "#222a3d",
+            "on-secondary-container": "#c9aeff",
+            "error-container": "#93000a",
+            "on-surface": "#dae2fd",
+            "surface-variant": "#2d3449",
+            "surface-bright": "#31394d",
+            "background": "#0b1326",
+            "primary-fixed-dim": "#c3c0ff",
+            "surface-container-highest": "#2d3449",
+            "surface-container": "#171f33",
+            "secondary-fixed-dim": "#d2bbff",
+            "primary-container": "#4f46e5",
+            "surface-tint": "#c3c0ff",
+            "on-primary-fixed": "#0f0069",
+            "inverse-surface": "#dae2fd",
+            "on-tertiary-container": "#93e8ff",
+            "on-primary-fixed-variant": "#3323cc",
+            "on-tertiary-fixed-variant": "#004e5c",
+            "on-tertiary": "#003640",
+            "on-tertiary-fixed": "#001f26",
+            "outline": "#918fa1",
+            "on-secondary": "#3f008e",
+            "on-surface-variant": "#c7c4d8",
+            "inverse-on-surface": "#283044",
+            "secondary": "#d2bbff",
+            "on-error-container": "#ffdad6",
+            "secondary-fixed": "#eaddff",
+            "tertiary-fixed": "#acedff",
+            "on-primary": "#1d00a5",
+            "inverse-primary": "#4d44e3",
+            "on-primary-container": "#dad7ff",
+            "on-secondary-fixed": "#25005a",
+            "on-background": "#dae2fd",
+            "tertiary": "#4cd7f6",
+            "tertiary-fixed-dim": "#4cd7f6",
+            "primary": "#c3c0ff",
+            "on-error": "#690005",
+            "surface-dim": "#0b1326",
+            "outline-variant": "#464555",
+            "tertiary-container": "#006a7c",
+            "surface": "#0b1326",
+            "surface-container-low": "#131b2e",
+            "error": "#ffb4ab",
+            "primary-fixed": "#e2dfff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-mobile": "1rem",
+            "margin": "2rem",
+            "space-xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "gutter": "1.5rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "code-sm": ["JetBrains Mono"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+            "headline-xl-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+            "headline-xl": ["48px", { "lineHeight": "56px", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "code-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    
+    /* Background Cyber Grid Pattern */
+    .techreachly-grid {
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.12) 0%, transparent 60%),
+        linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 36px 36px, 36px 36px;
+    }
+
+    /* Radar Pulse Animation */
+    @keyframes radarSweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .animate-radar {
+      animation: radarSweep 14s linear infinite;
+    }
+
+    @keyframes pulseAura {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.05); }
+    }
+    .animate-aura {
+      animation: pulseAura 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-on-primary-container font-body-md text-body-md overflow-x-hidden">
+<!-- Top Announcement / Live Telemetry Micro-Bar -->
+<header class="w-full bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/20 px-4 lg:px-8 py-2 z-40 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-code-sm text-code-sm text-tertiary font-medium">PRECISION CLUSTER v2.4</span>
+</div>
+<span class="hidden md:inline-block text-outline-variant">•</span>
+<span class="hidden md:inline-block font-label-sm text-label-sm text-on-surface-variant">Sourcing node: <span class="text-on-surface font-mono">us-east.reachly.ai</span> (latency 14ms)</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-on-surface-variant hover:text-tertiary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span class="font-label-sm text-label-sm">SOC-2 Type II Verified</span>
+</div>
+<div class="h-3 w-[1px] bg-outline-variant/30"></div>
+<!-- Theme Switcher & Help Quick Actions -->
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 font-label-sm text-label-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">help</span>
+<span class="hidden sm:inline">Support</span>
+</button>
+<button aria-label="Toggle dark mode" class="p-1 rounded text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">dark_mode</span>
+</button>
+</div>
+</header>
+<!-- Main Viewport: Two-Column Split Architecture -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- LEFT SHOWCASE: Brand Identity, Telemetry & Social Proof (~58% / 7 cols) -->
+<section class="lg:col-span-7 flex flex-col justify-center relative techreachly-grid p-6 sm:p-10 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest/60 backdrop-blur-xl overflow-hidden shadow-2xl">
+<!-- Ambient Glow Spotlights -->
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary-container/20 rounded-full blur-3xl pointer-events-none animate-aura"></div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-tertiary/15 rounded-full blur-3xl pointer-events-none animate-aura" style="animation-delay: -3s;"></div>
+<!-- Top Badge & Header -->
+<div class="relative z-10 flex items-center justify-between mb-8">
+<div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-surface-container-high/80 border border-outline-variant/30 backdrop-blur-md shadow-inner">
+<span class="material-symbols-outlined text-tertiary text-[18px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold tracking-wide uppercase">Algorithmic Talent Engagement</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant/80 bg-surface-container-low px-2.5 py-1 rounded border border-outline-variant/15">99.98% UPTIME</span>
+</div>
+<!-- Brand Logo Hero Display -->
+<div class="relative z-10 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+<div class="relative group">
+<div class="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary-container via-secondary-container to-tertiary opacity-40 blur group-hover:opacity-75 transition duration-500"></div>
+<img alt="TechReachly Precision Radar Mark" class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shadow-xl border border-outline-variant/30 object-contain bg-surface-container-lowest p-1" src="https://lh3.googleusercontent.com/aida/AEtjO1UbyHuH_J4HsIkbCz0lEHTmmSp1o-1pNGUyv2Y8fZMFcvcvBrvl8rsSz2L2S59OKMTIEXeOZ-DnEfSPUDqhV2zUhEpkgulasiuLWwgRItV8zH7r6TytrauwVjwoHMG1YCcBBuEBlpbZRVCMZvAcLt48E51n41qj6kPv8QRy-IqVEzq6TWmt3YiwhoT64sBsxGWOnvAgzkzipnBXx8Ctfo2mGyK2WQ7BTK2PLI31injKC2Cn-BR6ZwPQMdA"/>
+</div>
+<div>
+<img alt="TechReachly Logo" class="h-9 sm:h-11 w-auto object-contain filter drop-shadow-[0_2px_12px_rgba(79,70,229,0.35)]" src="https://lh3.googleusercontent.com/aida/AEtjO1XrVBt9wolt07UegANN2EA0qHz36dkGrrTPKNwHMeQsXPzIbFhzovespyI9mvol_aoztD8T0m-zaLvBF6VWjuHhB3DNq76z3NCAAGnMVThG4aC9BTRhqeFuJwSmLmAqEt3SJ2vYY5xPhMZqr6vJYMMxJ0sxOunUTMhCs53jnEi8fuwe_1RRv5p0UsPI2uCNq00JJeqeAlp-TE4mBB9sXr684KZxGyGMplN-1Kn9mx7E-Saa3nGOXUlAVg"/>
+<p class="font-label-sm text-label-sm text-tertiary font-mono tracking-wider mt-1.5 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">track_changes</span>
+            HIGH-VELOCITY SOURCING ENGINE
+          </p>
+</div>
+</div>
+<!-- Headline & Subtext -->
+<div class="relative z-10 space-y-3 mb-8">
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-on-surface leading-tight">
+          Supercharge your technical career trajectory with <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary">Autonomous Outreach</span>.
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl leading-relaxed">
+          Surgically bridge elite engineers with tier-1 venture and enterprise hiring leads. Bypassing noise with verified direct-inbox routing and telemetry-backed match intelligence.
+        </p>
+</div>
+<!-- Live Telemetry Bento Grid Cards -->
+<div class="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-8">
+<!-- Metric Card 1 -->
+<div class="bg-surface-container/70 border border-outline-variant/20 rounded-xl p-4 backdrop-blur-md relative overflow-hidden group hover:border-tertiary/40 transition-all duration-300">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Deliverability</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">verified</span>
+</div>
+<div class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">98.4%</div>
+<div class="flex items-center gap-1 mt-1 text-tertiary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>Zero spam flags</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-container to-tertiary"></div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-surface-container/70 border border-outline-variant/20 rounded-xl p-4 backdrop-blur-md relative overflow-hidden group hover:border-secondary/40 transition-all duration-300">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Response Rate</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">trending_up</span>
+</div>
+<div class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">3.4x</div>
+<div class="flex items-center gap-1 mt-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">speed</span>
+<span>vs. cold LinkedIn</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-secondary-container to-secondary"></div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-surface-container/70 border border-outline-variant/20 rounded-xl p-4 backdrop-blur-md relative overflow-hidden group hover:border-primary/40 transition-all duration-300">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Active Partners</span>
+<span class="material-symbols-outlined text-primary text-[18px]">groups</span>
+</div>
+<div class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">2,400+</div>
+<div class="flex items-center gap-1 mt-1 text-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">corporate_fare</span>
+<span>Top Tier-1 firms</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-container to-primary"></div>
+</div>
+</div>
+<!-- Live Match Simulation / Testimonial Feed Card -->
+<div class="relative z-10 bg-surface-container-high/40 border border-outline-variant/25 rounded-xl p-4 backdrop-blur-lg flex items-start gap-4">
+<div class="relative flex-shrink-0">
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-container to-tertiary flex items-center justify-center text-on-surface font-bold text-sm shadow-md ring-2 ring-outline-variant/30">
+            ER
+          </div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-tertiary border-2 border-surface-container rounded-full" title="Active Outreach"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold text-sm">Elena Rostova</span>
+<span class="px-2 py-0.5 rounded bg-tertiary-container/40 text-tertiary font-code-sm text-code-sm border border-tertiary/20">Staff Systems Architect</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Matched 11d ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+            "TechReachly's adaptive pitch synthesizer secured 4 Tier-1 interviews in less than two weeks without sending a single cold manual email."
+          </p>
+<div class="flex items-center gap-3 mt-2 font-label-sm text-label-sm text-outline">
+<span class="flex items-center gap-1 text-tertiary font-mono"><span class="material-symbols-outlined text-[14px]">check_circle</span> 4 Offers Pending</span>
+<span>•</span>
+<span>Stripe, Datadog, Snowflake Sourcing Leads</span>
+</div>
+</div>
+</div>
+<!-- Recruiter Radar Sweep Graphic Simulation -->
+<div class="absolute -right-16 -bottom-16 w-64 h-64 border border-outline-variant/10 rounded-full pointer-events-none hidden sm:block">
+<div class="w-full h-full border border-outline-variant/15 rounded-full p-8 animate-radar">
+<div class="w-full h-full border border-tertiary/20 rounded-full relative">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-tertiary rounded-full shadow-[0_0_8px_#06b6d4]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- RIGHT AUTHENTICATION PANEL: High Conversion Form (~42% / 5 cols) -->
+<section class="lg:col-span-5 w-full flex flex-col justify-center">
+<div class="w-full bg-surface-container-low/95 border border-outline-variant/25 rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_-15px_rgba(2,6,23,0.85),0_0_25px_rgba(79,70,229,0.15)] backdrop-blur-2xl relative overflow-hidden">
+<!-- Subtle Top Glow Bar -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-tertiary"></div>
+<!-- Card Header -->
+<div class="mb-6 text-left">
+<div class="flex items-center justify-between mb-3">
+<span class="font-code-sm text-code-sm uppercase tracking-widest text-tertiary font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+              Secure Auth Gateway
+            </span>
+<span class="font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant px-2.5 py-1 rounded-md border border-outline-variant/20">
+              v2.4 LTS
+            </span>
+</div>
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">Welcome back</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Log in to manage your autonomous candidate pipelines &amp; outreach telemetry.
+          </p>
+</div>
+<!-- 1-Click Fast Auth Options -->
+<div class="space-y-2.5 mb-5">
+<!-- Google Auth -->
+<button class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-surface-container border border-outline-variant/30 hover:border-outline hover:bg-surface-container-high text-on-surface rounded-xl font-label-md text-label-md transition-all duration-150 active:scale-[0.99] shadow-sm" type="button">
+<svg class="w-4 h-4" viewbox="0 0 24 24">
+<path d="M12 5c1.56 0 2.96.54 4.07 1.43l3.05-3.05C17.27 1.63 14.81 1 12 1 7.46 1 3.59 3.58 1.66 7.36l3.69 2.86C6.23 7.33 8.87 5 12 5z" fill="#EA4335"></path>
+<path d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.7 2.87c2.16-2 3.72-4.94 3.72-8.69z" fill="#4285F4"></path>
+<path d="M5.35 14.78c-.24-.72-.37-1.49-.37-2.28s.13-1.56.37-2.28L1.66 7.36C.6 9.47 0 11.66 0 14s.6 4.53 1.66 6.64l3.69-2.86z" fill="#FBBC05"></path>
+<path d="M12 23c3.24 0 5.95-1.08 7.93-2.91l-3.7-2.87c-1.08.72-2.45 1.16-4.23 1.16-3.13 0-5.77-2.33-6.65-5.22L1.66 16c1.93 3.78 5.8 6.36 10.34 6.36z" fill="#34A853"></path>
+</svg>
+<span>Continue with Google</span>
+</button>
+<!-- GitHub Auth -->
+<button class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-surface-container border border-outline-variant/30 hover:border-outline hover:bg-surface-container-high text-on-surface rounded-xl font-label-md text-label-md transition-all duration-150 active:scale-[0.99] shadow-sm" type="button">
+<svg class="w-4 h-4 fill-current text-on-surface" viewbox="0 0 24 24">
+<path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path>
+</svg>
+<span>Continue with GitHub</span>
+</button>
+<!-- 1-Click Recruiter Instant Demo -->
+<button class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-gradient-to-r from-secondary-container/30 to-tertiary-container/30 border border-secondary/30 hover:border-secondary text-secondary-fixed hover:text-on-surface font-label-sm text-label-sm transition-all duration-200 group" id="btn-demo-fill" type="button">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-tertiary group-hover:rotate-12 transition-transform" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span>1-Click Recruiter Demo Access</span>
+</div>
+<span class="font-code-sm text-code-sm text-tertiary bg-surface-container-lowest/80 px-2 py-0.5 rounded border border-outline-variant/30">Auto-fill sandbox</span>
+</button>
+</div>
+<!-- Divider with Label -->
+<div class="relative flex items-center justify-center my-5">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/20"></div>
+</div>
+<span class="relative px-3 bg-surface-container-low font-label-sm text-label-sm text-on-surface-variant font-normal">
+            Or continue with corporate / candidate email
+          </span>
+</div>
+<!-- Authentication Form -->
+<form class="space-y-4" id="loginForm" onsubmit="event.preventDefault(); simulateLogin();">
+<!-- Work Email Input Field -->
+<div class="space-y-1.5 text-left">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md font-medium text-on-surface flex items-center gap-1.5" for="email">
+                Work Email Address
+              </label>
+<span class="font-code-sm text-code-sm text-outline">recruiter@company.com</span>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant group-focus-within:text-tertiary transition-colors">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+</div>
+<input class="w-full h-11 pl-10 pr-12 rounded-lg bg-surface-container-lowest border border-outline-variant/30 text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:border-tertiary focus:ring-1 focus:ring-tertiary transition-all duration-200" id="email" placeholder="name@domain.com" required="" type="email" value="sourcing.lead@techreachly.io"/>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+<kbd class="hidden sm:inline-block px-1.5 py-0.5 font-code-sm text-[10px] text-outline bg-surface-container border border-outline-variant/30 rounded">⌘K</kbd>
+</div>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-1.5 text-left">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md font-medium text-on-surface" for="password">
+                Password
+              </label>
+<a class="font-label-sm text-label-sm text-tertiary hover:underline hover:text-tertiary-fixed transition-colors" href="#forgot">
+                Forgot password?
+              </a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</div>
+<input class="w-full h-11 pl-10 pr-11 rounded-lg bg-surface-container-lowest border border-outline-variant/30 text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all duration-200" id="password" placeholder="••••••••••••" required="" type="password" value="AlgoSourcing2025!"/>
+<button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-outline hover:text-on-surface transition-colors focus:outline-none" id="toggle-pwd-btn" onclick="togglePasswordVisibility()" type="button">
+<span class="material-symbols-outlined text-[18px]" id="pwd-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me Checkbox -->
+<div class="flex items-center justify-between pt-1">
+<label class="flex items-center gap-2.5 cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest border-outline-variant/40 text-primary-container focus:ring-0 focus:ring-offset-0 focus:outline-none transition-all cursor-pointer" type="checkbox"/>
+<span class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                Remember this terminal for 30 days
+              </span>
+</label>
+<span class="font-code-sm text-code-sm text-outline hidden sm:inline">2FA: Ready</span>
+</div>
+<!-- Primary Submit CTA -->
+<div class="pt-2">
+<button class="w-full h-11 relative group overflow-hidden rounded-lg bg-gradient-to-r from-primary-container via-secondary-container to-primary-container bg-[length:200%_auto] hover:bg-right transition-all duration-500 font-label-md text-label-md text-white font-semibold flex items-center justify-center gap-2 border border-white/20 shadow-[0_4px_20px_-2px_rgba(79,70,229,0.5)] active:scale-[0.98]" id="submitBtn" type="submit">
+<span class="relative z-10 flex items-center gap-2" id="submitBtnText">
+<span>Sign In to TechReachly</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</span>
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</button>
+</div>
+</form>
+<!-- Compliance & Security Trust Badges -->
+<div class="mt-6 pt-5 border-t border-outline-variant/20 flex flex-wrap items-center justify-center gap-4 text-outline font-label-sm text-label-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-tertiary">shield</span>
+<span>256-Bit TLS</span>
+</div>
+<span>•</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-secondary">verified_user</span>
+<span>SOC2 Type II</span>
+</div>
+<span>•</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-primary">policy</span>
+<span>GDPR Safe</span>
+</div>
+</div>
+<!-- Free Trial Callout Footer -->
+<div class="mt-4 text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Don't have an enterprise workspace? 
+            <a class="text-tertiary font-medium hover:underline hover:text-tertiary-fixed ml-1" href="#trial">
+              Start 14-day free trial
+            </a>
+</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Canonical Shared Component: Footer (Exact content & styles from Shared Components JSON) -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/15 text-primary">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-6 lg:px-12 py-8 max-w-7xl mx-auto gap-4">
+<!-- Copyright text from JSON -->
+<p class="text-body-sm font-body-sm text-on-surface-variant text-center md:text-left">
+        © 2025 TechReachly Inc. Algorithmic precision for high-velocity sourcing. All rights reserved.
+      </p>
+<!-- Links from JSON -->
+<div class="flex flex-wrap items-center justify-center gap-6">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary transition-colors duration-150" href="#design-tokens">Design Tokens</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary transition-colors duration-150" href="#brand-assets">Brand Assets</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary transition-colors duration-150" href="#press-kit">Press Kit</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary transition-colors duration-150" href="#changelog">Changelog</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary transition-colors duration-150" href="#privacy">Privacy &amp; Legal</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary transition-colors duration-150" href="#api">API Docs</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+    // Password visibility toggle
+    function togglePasswordVisibility() {
+      const input = document.getElementById('password');
+      const icon = document.getElementById('pwd-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    // Demo Fill Auto-injector
+    document.getElementById('btn-demo-fill')?.addEventListener('click', function() {
+      const emailInput = document.getElementById('email');
+      const pwdInput = document.getElementById('password');
+      emailInput.value = 'demo.lead@techreachly.io';
+      pwdInput.value = 'AutonomousSpeed#2025';
+      
+      // Flash effect to signify auto-fill
+      emailInput.classList.add('ring-2', 'ring-tertiary');
+      pwdInput.classList.add('ring-2', 'ring-tertiary');
+      setTimeout(() => {
+        emailInput.classList.remove('ring-2', 'ring-tertiary');
+        pwdInput.classList.remove('ring-2', 'ring-tertiary');
+      }, 700);
+    });
+
+    // Simulating login state
+    function simulateLogin() {
+      const btn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('submitBtnText');
+      btnText.innerHTML = `
+        <span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+        <span>Verifying Security Protocol...</span>
+      `;
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btnText.innerHTML = `
+          <span class="material-symbols-outlined text-[18px]">check</span>
+          <span>Access Granted • Redirecting...</span>
+        `;
+        btn.classList.add('bg-tertiary-container');
+        setTimeout(() => {
+          btnText.innerHTML = `
+            <span>Sign In to TechReachly</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          `;
+          btn.disabled = false;
+        }, 1500);
+      }, 1000);
+    }
+  </script>
+</body></html>
