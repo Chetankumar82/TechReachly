@@ -49,6 +49,15 @@ const userSchema = new mongoose.Schema(
       default: '',
       trim: true,
     },
+    // Password Reset Flow
+    passwordResetToken: {
+      type: String,
+      default: null,
+    },
+    passwordResetExpires: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );

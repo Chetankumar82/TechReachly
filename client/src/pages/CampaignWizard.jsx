@@ -88,7 +88,7 @@ export const CampaignWizard = () => {
   // Cadence Options
   const [outreachMode, setOutreachMode] = useState('with_jd'); // 'with_jd' | 'speculative'
   const [jobDescription, setJobDescription] = useState('');
-  const [model, setModel] = useState('gemini-3-flash-preview'); // 'gemini-3-flash-preview' | 'gemini-3.5-flash' | 'gemini-4-argon'
+  const [model, setModel] = useState('gemini-2.0-flash'); // 'gemini-2.0-flash' | 'gemini-1.5-flash' | 'gemini-1.5-pro'
   const [tone, setTone] = useState('concise');
   const [customApiKey, setCustomApiKey] = useState('');
   const [message, setMessage] = useState({ text: '', type: '' });
@@ -256,11 +256,11 @@ Key Requirements:
             delayDays: prev.step3?.delayDays || 4,
           },
         }));
-        const engineLabel = model.includes('argon') || model.includes('pro')
-          ? 'Gemini 4 Argon'
-          : model.includes('3.5')
-            ? 'Gemini 3.5 Flash'
-            : 'Gemini 3 Flash';
+        const engineLabel = model.includes('pro')
+          ? 'Gemini 1.5 Pro'
+          : model.includes('1.5-flash')
+            ? 'Gemini 1.5 Flash'
+            : 'Gemini 2.0 Flash';
         setMessage({
           text: `Cadence drafted via ${engineLabel}! Review below.`,
           type: 'success',
@@ -876,9 +876,9 @@ Key Requirements:
                   onChange={(e) => setModel(e.target.value)}
                   className="px-3 py-1.5 rounded-lg saas-input text-xs font-medium"
                 >
-                  <option value="gemini-3-flash-preview">Gemini 3 Flash (Fastest & Ultra Reliable)</option>
-                  <option value="gemini-3.5-flash">Gemini 3.5 Flash (Balanced Intelligence)</option>
-                  <option value="gemini-4-argon">Gemini 4 Argon (Deep Strategic Reasoning)</option>
+                  <option value="gemini-2.0-flash">Gemini 2.0 Flash (Fastest & Ultra Reliable)</option>
+                  <option value="gemini-1.5-flash">Gemini 1.5 Flash (Balanced Intelligence)</option>
+                  <option value="gemini-1.5-pro">Gemini 1.5 Pro (Deep Strategic Reasoning)</option>
                 </select>
               </div>
 

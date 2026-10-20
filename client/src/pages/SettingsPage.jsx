@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 
 export const SettingsPage = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, refreshUser } = useAuth();
 
   const [smtp, setSmtp] = useState({
     host: 'smtp.gmail.com',
@@ -197,6 +197,9 @@ export const SettingsPage = () => {
 
         setJustSaved(true);
         setMessage({ text: 'All credentials and settings saved and preserved successfully!', type: 'success' });
+
+        // Refresh user context so the Navbar mailbox beacon updates immediately
+        refreshUser().catch(() => {});
 
         // Reset justSaved indicator after 3 seconds
         setTimeout(() => {
