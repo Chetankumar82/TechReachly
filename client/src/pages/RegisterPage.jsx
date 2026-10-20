@@ -89,7 +89,7 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="h-screen max-h-screen saas-bg text-slate-900 dark:text-zinc-100 flex flex-col justify-between selection:bg-indigo-600 selection:text-white transition-colors duration-200 overflow-hidden w-full max-w-full">
+    <div className="min-h-screen lg:h-screen lg:max-h-screen saas-bg text-slate-900 dark:text-zinc-100 flex flex-col justify-between selection:bg-indigo-600 selection:text-white transition-colors duration-200 overflow-x-hidden lg:overflow-hidden w-full max-w-full">
       {/* 1. Header Bar: Compact 44px fixed height */}
       <header className="w-full h-11 border-b border-slate-200/80 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md px-4 sm:px-6 z-40 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
@@ -131,11 +131,11 @@ export const RegisterPage = () => {
         </div>
       </header>
 
-      {/* 2. Main Hero Section: Fits 100% inside available viewport height */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-center min-h-0 overflow-y-auto lg:overflow-hidden">
+      {/* 2. Main Hero Section: Fits 100% inside available viewport height on desktop, scrolls naturally on mobile */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-2 flex items-center justify-center min-h-0 overflow-y-auto lg:overflow-hidden">
         <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-center">
-          {/* LEFT SHOWCASE: Brand Identity, Bento Metrics & Roadmap (~56% / 7 cols) */}
-          <section className="lg:col-span-7 flex flex-col justify-center relative p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shadow-xl overflow-hidden [contain:paint] isolate group">
+          {/* LEFT SHOWCASE: Brand Identity, Bento Metrics & Roadmap (~56% / 7 cols) - Desktop only */}
+          <section className="hidden lg:flex lg:col-span-7 flex-col justify-center relative p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shadow-xl overflow-hidden [contain:paint] isolate group">
             {/* Ambient Lighting Gradients */}
             <div className="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/15 dark:bg-indigo-500/20 rounded-full blur-3xl pointer-events-none animate-reach-ambient" />
             <div
@@ -255,7 +255,17 @@ export const RegisterPage = () => {
           </section>
 
           {/* RIGHT AUTHENTICATION PANEL: Conversion-Optimized Workspace Setup (~44% / 5 cols) */}
-          <section className="lg:col-span-5 w-full flex flex-col justify-center min-w-0">
+          <section className="lg:col-span-5 w-full max-w-md mx-auto flex flex-col justify-center min-w-0">
+            {/* Mobile-Only Brand Header */}
+            <div className="lg:hidden text-center mb-3">
+              <div className="flex justify-center mb-1.5">
+                <Logo variant="full" size="sm" showBadge={true} badgeText="v2.4" />
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-zinc-400">
+                Instant Workspace Setup & Autonomous Outreach
+              </p>
+            </div>
+
             <div className="w-full bg-white dark:bg-zinc-900/95 border border-slate-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-2xl backdrop-blur-2xl relative overflow-hidden">
               {/* Top Multi-Stop Gradient Accent Bar */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400" />

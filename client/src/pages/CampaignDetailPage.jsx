@@ -281,7 +281,7 @@ export const CampaignDetailPage = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full text-left text-xs border-collapse min-w-[620px]">
             <thead>
               <tr className="border-b border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 uppercase tracking-wider font-semibold text-[11px] bg-slate-50/50 dark:bg-zinc-900/40">
                 <th className="py-3 px-4">Recruiter & Company</th>

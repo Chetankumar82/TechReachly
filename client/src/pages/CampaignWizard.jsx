@@ -992,41 +992,44 @@ Key Requirements:
         </div>
 
         {/* Cadence Step Navigation Tabs */}
-        <div className="flex border-b border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950">
+        <div className="flex border-b border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 overflow-x-auto">
           <button
             onClick={() => setActiveStepTab(1)}
-            className={`flex-1 py-2.5 px-3 text-xs font-medium border-b-2 transition-colors flex items-center justify-center gap-2 cursor-pointer ${
+            className={`flex-1 py-2.5 px-2 sm:px-3 text-xs font-medium border-b-2 transition-colors flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer whitespace-nowrap min-w-0 ${
               activeStepTab === 1
                 ? 'border-indigo-600 text-slate-900 dark:text-zinc-100 bg-white dark:bg-zinc-900/60 font-semibold'
                 : 'border-transparent text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/50 dark:hover:bg-zinc-900/60'
             }`}
           >
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-mono">1</span>
-            <span>Step 1: Pitch (Day 0)</span>
+            <span className="hidden sm:inline">Step 1: Pitch (Day 0)</span>
+            <span className="sm:hidden">1: Pitch</span>
           </button>
 
           <button
             onClick={() => setActiveStepTab(2)}
-            className={`flex-1 py-2.5 px-3 text-xs font-medium border-b-2 transition-colors flex items-center justify-center gap-2 cursor-pointer ${
+            className={`flex-1 py-2.5 px-2 sm:px-3 text-xs font-medium border-b-2 transition-colors flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer whitespace-nowrap min-w-0 ${
               activeStepTab === 2
                 ? 'border-indigo-600 text-slate-900 dark:text-zinc-100 bg-white dark:bg-zinc-900/60 font-semibold'
                 : 'border-transparent text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/50 dark:hover:bg-zinc-900/60'
             }`}
           >
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-mono">2</span>
-            <span>Step 2: Follow-up (+{sequenceTemplates.step2?.delayDays || 3}d)</span>
+            <span className="hidden sm:inline">Step 2: Follow-up (+{sequenceTemplates.step2?.delayDays || 3}d)</span>
+            <span className="sm:hidden">2: Follow-up</span>
           </button>
 
           <button
             onClick={() => setActiveStepTab(3)}
-            className={`flex-1 py-2.5 px-3 text-xs font-medium border-b-2 transition-colors flex items-center justify-center gap-2 cursor-pointer ${
+            className={`flex-1 py-2.5 px-2 sm:px-3 text-xs font-medium border-b-2 transition-colors flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer whitespace-nowrap min-w-0 ${
               activeStepTab === 3
                 ? 'border-indigo-600 text-slate-900 dark:text-zinc-100 bg-white dark:bg-zinc-900/60 font-semibold'
                 : 'border-transparent text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/50 dark:hover:bg-zinc-900/60'
             }`}
           >
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-mono">3</span>
-            <span>Step 3: Breakup (+{sequenceTemplates.step3?.delayDays || 4}d)</span>
+            <span className="hidden sm:inline">Step 3: Breakup (+{sequenceTemplates.step3?.delayDays || 4}d)</span>
+            <span className="sm:hidden">3: Breakup</span>
           </button>
         </div>
 
@@ -1591,32 +1594,32 @@ Key Requirements:
             </span>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
             <button
               type="button"
               onClick={handleSendTestEmail}
               disabled={sendingTest}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-zinc-700 font-semibold text-xs transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-zinc-700 font-semibold text-xs transition-all shadow-xs disabled:opacity-50 cursor-pointer flex-1 sm:flex-none"
               title="Dispatches a live preview of the current active step to your email"
             >
               <Mail className="w-3.5 h-3.5 text-indigo-500" />
-              <span>{sendingTest ? 'Sending Test...' : 'Send Test to Myself'}</span>
+              <span>{sendingTest ? 'Sending...' : 'Test Email'}</span>
             </button>
 
             <button
               onClick={handleLaunchCampaign}
               disabled={launching}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 font-semibold text-xs shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 font-semibold text-xs shadow-sm transition-all disabled:opacity-50 cursor-pointer flex-1 sm:flex-none"
             >
               {launching ? (
                 <>
                   <Clock className="w-3.5 h-3.5 animate-spin" />
-                  Scheduling Cadence...
+                  <span>Scheduling...</span>
                 </>
               ) : (
                 <>
                   <Send className="w-3.5 h-3.5" />
-                  Launch Automated Cadence
+                  <span>Launch Cadence</span>
                 </>
               )}
             </button>

@@ -455,18 +455,18 @@ export const ResumePage = () => {
       )}
 
       {/* Mode Navigation Tabs */}
-      <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 text-xs w-fit">
+      <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 text-xs w-full sm:w-fit overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('editor')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all ${
+          className={`flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg font-medium transition-all flex-1 sm:flex-none whitespace-nowrap ${
             activeTab === 'editor'
               ? 'bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs'
               : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Edit3 className="w-3.5 h-3.5" />
-          <span>Manual Entry & Edit Details</span>
+          <span>Manual Entry<span className="hidden sm:inline"> & Edit Details</span></span>
           {(parsedData.fullName || parsedData.skills.length > 0) && (
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-1" />
           )}
@@ -475,14 +475,14 @@ export const ResumePage = () => {
         <button
           type="button"
           onClick={() => setActiveTab('upload')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all ${
+          className={`flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg font-medium transition-all flex-1 sm:flex-none whitespace-nowrap ${
             activeTab === 'upload'
               ? 'bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs'
               : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Upload className="w-3.5 h-3.5" />
-          <span>Upload Resume (AI Auto-Parse)</span>
+          <span>Upload Resume<span className="hidden sm:inline"> (AI Auto-Parse)</span></span>
           {resume?.fileName && (
             <span className="text-[10px] px-1.5 py-0.2 bg-slate-200 dark:bg-zinc-700 rounded text-slate-600 dark:text-zinc-300 font-mono">
               PDF

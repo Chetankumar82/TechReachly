@@ -161,10 +161,11 @@ export const Navbar = () => {
             {/* "+ New Outreach" Primary Action Button */}
             <Link
               to="/campaign/new"
-              className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_auto] hover:bg-right transition-all duration-300 shadow-sm shadow-indigo-500/20 hover:shadow-md hover:shadow-indigo-500/30 hover:-translate-y-0.5 active:translate-y-0"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_auto] hover:bg-right transition-all duration-300 shadow-sm shadow-indigo-500/20 hover:shadow-md hover:shadow-indigo-500/30 hover:-translate-y-0.5 active:translate-y-0 shrink-0"
             >
               <Plus className="w-3.5 h-3.5 text-cyan-200" />
-              <span>New Outreach</span>
+              <span className="hidden sm:inline">New Outreach</span>
+              <span className="sm:hidden">New</span>
             </Link>
 
             {/* Theme Toggle (Light / Dark Mode) */}

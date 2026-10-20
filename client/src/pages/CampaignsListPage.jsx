@@ -185,7 +185,7 @@ export const CampaignsListPage = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap w-full md:w-auto pt-2 md:pt-0">
                   <button
                     onClick={() => handleToggleStatus(campaign._id, campaign.status)}
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 hover:bg-slate-50 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white text-xs font-medium transition-colors shadow-sm"

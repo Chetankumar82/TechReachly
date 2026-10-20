@@ -35,7 +35,7 @@ const ProtectedLayout = ({ children }) => {
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[760px] h-[380px] bg-gradient-to-b from-indigo-500/20 via-violet-500/10 to-transparent blur-3xl rounded-full" />
       </div>
       <Navbar />
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-5 sm:py-8 lg:py-10">
         {children}
       </main>
       <footer className="border-t border-slate-200 dark:border-zinc-900 py-6 text-center text-xs text-slate-500 dark:text-zinc-500">

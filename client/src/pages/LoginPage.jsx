@@ -101,9 +101,9 @@ export const LoginPage = () => {
       </header>
 
       {/* Main Two-Column Split Architecture */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        {/* LEFT SHOWCASE: Brand Identity, Telemetry & Social Proof (~58% / 7 cols) */}
-        <section className="lg:col-span-7 flex flex-col justify-center relative p-6 sm:p-10 rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shadow-xl overflow-hidden [contain:paint] isolate group">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        {/* LEFT SHOWCASE: Brand Identity, Telemetry & Social Proof (~58% / 7 cols) - Desktop only */}
+        <section className="hidden lg:flex lg:col-span-7 flex-col justify-center relative p-6 sm:p-10 rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl shadow-xl overflow-hidden [contain:paint] isolate group">
           {/* Ambient Lighting Gradients */}
           <div className="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/15 dark:bg-indigo-500/20 rounded-full blur-3xl pointer-events-none animate-reach-ambient" />
           <div
@@ -229,7 +229,17 @@ export const LoginPage = () => {
         </section>
 
         {/* RIGHT AUTHENTICATION PANEL: High Conversion Form (~42% / 5 cols) */}
-        <section className="lg:col-span-5 w-full flex flex-col justify-center min-w-0">
+        <section className="lg:col-span-5 w-full max-w-md mx-auto flex flex-col justify-center min-w-0">
+          {/* Mobile-Only Brand Header */}
+          <div className="lg:hidden text-center mb-5">
+            <div className="flex justify-center mb-2">
+              <Logo variant="full" size="sm" showBadge={true} badgeText="v2.4" />
+            </div>
+            <p className="text-xs text-slate-500 dark:text-zinc-400">
+              Autonomous Recruiter Outreach & Telemetry Gateway
+            </p>
+          </div>
+
           <div className="w-full bg-white dark:bg-zinc-900/90 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-8 md:p-9 shadow-2xl backdrop-blur-2xl relative overflow-hidden">
             {/* Top Multi-Stop Gradient Accent Bar */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400" />

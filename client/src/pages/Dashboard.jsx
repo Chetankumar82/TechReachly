@@ -550,7 +550,7 @@ export const Dashboard = () => {
           </div>
 
           {/* Circular SVG Gauge and Metrics */}
-          <div className="flex items-center gap-6 py-2">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 py-2 text-center sm:text-left">
             <div className="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 90 90">
                 <circle
@@ -643,7 +643,7 @@ export const Dashboard = () => {
 
             <div className="overflow-x-auto">
               {stats?.recentLogs && stats.recentLogs.length > 0 ? (
-                <table className="w-full text-left text-xs border-collapse">
+                <table className="w-full text-left text-xs border-collapse min-w-[500px]">
                   <thead>
                     <tr className="border-b border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 uppercase tracking-wider font-semibold text-[11px] bg-slate-50/50 dark:bg-zinc-900/30">
                       <th className="py-3 px-5">Target Recruiter</th>
