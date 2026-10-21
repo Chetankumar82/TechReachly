@@ -24,7 +24,11 @@ api.interceptors.response.use(
       // Clear token if expired
       localStorage.removeItem('techreachly_token');
       localStorage.removeItem('techreachly_user');
-      if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+      if (
+        window.location.pathname !== '/login' &&
+        window.location.pathname !== '/register' &&
+        window.location.pathname !== '/directory'
+      ) {
         window.location.href = '/login';
       }
     }

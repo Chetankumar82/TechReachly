@@ -59,6 +59,46 @@ const hrContactSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'approved',
+      index: true,
+    },
+    submittedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    submittedByName: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    submittedByEmail: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    reviewedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    reviewedAt: {
+      type: Date,
+      default: null,
+    },
+    rejectionReason: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    submissionNotes: {
+      type: String,
+      default: '',
+      trim: true,
+    },
     tier: {
       type: String,
       enum: ['all', 'big_tech', 'unicorn', 'fintech', 'startup', 'remote', 'general'],

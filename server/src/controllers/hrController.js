@@ -1,13 +1,47 @@
 import { HRContact } from '../models/HRContact.js';
 import { Campaign } from '../models/Campaign.js';
 import { OutreachLog } from '../models/OutreachLog.js';
+import { User } from '../models/User.js';
+
+/**
+ * Mask an email for guest/unauthenticated visitors:
+ * e.g., 'priya.sharma@razorpay.com' -> 'pr••••••@razorpay.com'
+ */
+export const maskEmail = (email) => {
+  if (!email || typeof email !== 'string') return '';
+  const parts = email.split('@');
+  if (parts.length !== 2) return email;
+  const [local, domain] = parts;
+  if (local.length <= 2) {
+    return `${local.charAt(0)}•••@${domain}`;
+  }
+  return `${local.slice(0, 2)}••••••@${domain}`;
+};
+
+// Common free webmail domains that are rejected for corporate recruiter submissions
+const FREE_EMAIL_DOMAINS = [
+  'gmail.com',
+  'yahoo.com',
+  'hotmail.com',
+  'outlook.com',
+  'icloud.com',
+  'aol.com',
+  'zoho.com',
+  'protonmail.com',
+  'mail.com',
+  'yandex.com',
+];
 
 // @route   GET /api/hr-contacts
+// Public / Semi-public: Unauthenticated visitors see masked emails; authenticated users see full emails.
 export const getContacts = async (req, res) => {
   try {
     const { search, techStack, location, industry, tier, page = 1, limit = 100 } = req.query;
 
-    const query = {};
+    // Only approved (or legacy unassigned) contacts appear in the global directory
+    const query = {
+      status: { $in: ['approved', null] },
+    };
 
     if (search) {
       query.$or = [
@@ -69,12 +103,31 @@ export const getContacts = async (req, res) => {
       .skip(skip)
       .limit(Number(limit));
 
+    const isAuthenticated = Boolean(req.user);
+
+    // Format contacts: Mask emails if unauthenticated visitor
+    const formattedContacts = contacts.map((c) => {
+      const doc = c.toObject();
+      if (!isAuthenticated) {
+        return {
+          ...doc,
+          recruiterEmail: maskEmail(doc.recruiterEmail),
+          isMasked: true,
+        };
+      }
+      return {
+        ...doc,
+        isMasked: false,
+      };
+    });
+
     res.json({
       success: true,
       total,
       page: Number(page),
       pages: Math.ceil(total / Number(limit)),
-      data: contacts,
+      isAuthenticated,
+      data: formattedContacts,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -84,7 +137,9 @@ export const getContacts = async (req, res) => {
 // @route   GET /api/hr-contacts/tech-stacks
 export const getTechStacks = async (req, res) => {
   try {
-    const stacks = await HRContact.distinct('techStack');
+    const stacks = await HRContact.distinct('techStack', {
+      status: { $in: ['approved', null] },
+    });
     res.json({ success: true, data: stacks.filter(Boolean).sort() });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -92,27 +147,273 @@ export const getTechStacks = async (req, res) => {
 };
 
 // @route   POST /api/hr-contacts
+// Supports both Candidate Recruiter Submissions (status: 'pending') and Admin Direct Add (status: 'approved')
 export const createContact = async (req, res) => {
   try {
-    const { companyName, recruiterName, recruiterEmail, techStack, recruiterTitle, website, location, industry } = req.body;
+    const {
+      companyName,
+      recruiterName,
+      recruiterEmail,
+      techStack,
+      recruiterTitle,
+      website,
+      location,
+      industry,
+      tier,
+      submissionNotes,
+    } = req.body;
 
     if (!companyName || !recruiterName || !recruiterEmail) {
       return res.status(400).json({ success: false, message: 'Company, recruiter name, and email are required' });
     }
 
+    const cleanEmail = recruiterEmail.trim().toLowerCase();
+    const emailDomain = cleanEmail.split('@')[1];
+
+    if (!emailDomain || !emailDomain.includes('.')) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid work email address' });
+    }
+
+    const isAdmin = req.user?.role === 'admin';
+
+    // If submitted by candidate, validate corporate business domain and check for duplicates
+    if (!isAdmin) {
+      if (FREE_EMAIL_DOMAINS.includes(emailDomain)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please provide an official corporate work email (e.g. @company.com). Free personal webmail is not accepted.',
+        });
+      }
+
+      const existing = await HRContact.findOne({ recruiterEmail: cleanEmail });
+      if (existing) {
+        if (existing.status === 'approved') {
+          return res.status(400).json({
+            success: false,
+            message: `This recruiter (${cleanEmail}) is already verified and active in the global directory!`,
+          });
+        }
+        if (existing.status === 'pending') {
+          return res.status(400).json({
+            success: false,
+            message: `This recruiter (${cleanEmail}) has already been submitted and is awaiting admin verification.`,
+          });
+        }
+      }
+    }
+
+    const formattedTechStack = Array.isArray(techStack)
+      ? techStack
+      : (techStack || '').split(',').map((s) => s.trim()).filter(Boolean);
+
     const contact = await HRContact.create({
-      companyName,
-      recruiterName,
-      recruiterEmail,
-      techStack: Array.isArray(techStack) ? techStack : (techStack || '').split(',').map((s) => s.trim()),
-      recruiterTitle: recruiterTitle || 'Technical Recruiter',
-      website,
-      location,
-      industry,
+      companyName: companyName.trim(),
+      recruiterName: recruiterName.trim(),
+      recruiterEmail: cleanEmail,
+      techStack: formattedTechStack,
+      recruiterTitle: recruiterTitle?.trim() || 'Technical Recruiter',
+      website: website?.trim() || '',
+      location: location?.trim() || 'Remote / India',
+      industry: industry?.trim() || 'IT / Software Services',
+      tier: tier || 'general',
+      status: isAdmin ? 'approved' : 'pending',
+      verified: isAdmin ? true : false,
+      submittedBy: req.user._id,
+      submittedByName: req.user.name || '',
+      submittedByEmail: req.user.email || '',
+      submissionNotes: submissionNotes?.trim() || '',
+      reviewedBy: isAdmin ? req.user._id : null,
+      reviewedAt: isAdmin ? new Date() : null,
       createdBy: req.user._id,
     });
 
-    res.status(201).json({ success: true, data: contact });
+    res.status(201).json({
+      success: true,
+      message: isAdmin
+        ? 'Verified recruiter added directly to global directory.'
+        : 'Recruiter submitted for admin verification! Once approved, it will be published to the global directory.',
+      data: contact,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @route   GET /api/hr-contacts/my-submissions
+// Candidate view: lists all recruiter contacts contributed by the current logged-in user
+export const getMySubmissions = async (req, res) => {
+  try {
+    const submissions = await HRContact.find({ submittedBy: req.user._id }).sort({ createdAt: -1 });
+
+    const stats = {
+      total: submissions.length,
+      pending: submissions.filter((s) => s.status === 'pending').length,
+      approved: submissions.filter((s) => s.status === 'approved').length,
+      rejected: submissions.filter((s) => s.status === 'rejected').length,
+    };
+
+    res.json({
+      success: true,
+      stats,
+      data: submissions,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @route   DELETE /api/hr-contacts/my-submissions/:id
+// Candidate retracts/deletes their own pending or rejected submission
+export const deleteMySubmission = async (req, res) => {
+  try {
+    const contact = await HRContact.findOne({
+      _id: req.params.id,
+      submittedBy: req.user._id,
+    });
+
+    if (!contact) {
+      return res.status(404).json({ success: false, message: 'Submission not found' });
+    }
+
+    if (contact.status === 'approved') {
+      return res.status(403).json({
+        success: false,
+        message: 'Approved recruiters are part of the global directory and cannot be deleted by candidates.',
+      });
+    }
+
+    await HRContact.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: 'Submission retracted successfully.',
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// ==========================================
+// ADMIN MODERATION ENDPOINTS
+// ==========================================
+
+// @route   GET /api/hr-contacts/admin/pending
+// Admin: Fetch all pending recruiter submissions with heuristic pre-checks
+export const getAdminPendingContacts = async (req, res) => {
+  try {
+    const pendingContacts = await HRContact.find({ status: 'pending' })
+      .sort({ createdAt: -1 })
+      .populate('submittedBy', 'name email createdAt');
+
+    // Attach pre-flight inspection signals for the admin
+    const enriched = await Promise.all(
+      pendingContacts.map(async (item) => {
+        const doc = item.toObject();
+        const domain = doc.recruiterEmail.split('@')[1] || '';
+        const isFreeDomain = FREE_EMAIL_DOMAINS.includes(domain);
+
+        // Check if there are other entries with the same company or email
+        const duplicateCount = await HRContact.countDocuments({
+          recruiterEmail: doc.recruiterEmail,
+          _id: { $ne: doc._id },
+        });
+
+        return {
+          ...doc,
+          auditSignals: {
+            domain,
+            isCorporateDomain: !isFreeDomain,
+            duplicateCount,
+          },
+        };
+      })
+    );
+
+    res.json({
+      success: true,
+      count: enriched.length,
+      data: enriched,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @route   GET /api/hr-contacts/admin/stats
+// Admin: Overview stats for directory moderation
+export const getAdminStats = async (req, res) => {
+  try {
+    const [pendingCount, approvedCount, rejectedCount, totalUsers] = await Promise.all([
+      HRContact.countDocuments({ status: 'pending' }),
+      HRContact.countDocuments({ status: { $in: ['approved', null] } }),
+      HRContact.countDocuments({ status: 'rejected' }),
+      User.countDocuments({ role: 'candidate' }),
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        pendingCount,
+        approvedCount,
+        rejectedCount,
+        totalUsers,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @route   POST /api/hr-contacts/admin/:id/approve
+// Admin: Approve a pending recruiter submission and publish to the global directory
+export const approveContact = async (req, res) => {
+  try {
+    const contact = await HRContact.findById(req.params.id);
+    if (!contact) {
+      return res.status(404).json({ success: false, message: 'HR contact not found' });
+    }
+
+    contact.status = 'approved';
+    contact.verified = true;
+    contact.reviewedBy = req.user._id;
+    contact.reviewedAt = new Date();
+    contact.rejectionReason = '';
+
+    await contact.save();
+
+    res.json({
+      success: true,
+      message: `Approved ${contact.recruiterName} (${contact.companyName})! Published to global directory.`,
+      data: contact,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @route   POST /api/hr-contacts/admin/:id/reject
+// Admin: Reject a pending recruiter submission with feedback reason
+export const rejectContact = async (req, res) => {
+  try {
+    const { reason } = req.body;
+    const contact = await HRContact.findById(req.params.id);
+    if (!contact) {
+      return res.status(404).json({ success: false, message: 'HR contact not found' });
+    }
+
+    contact.status = 'rejected';
+    contact.verified = false;
+    contact.rejectionReason = reason?.trim() || 'Did not meet verification criteria';
+    contact.reviewedBy = req.user._id;
+    contact.reviewedAt = new Date();
+
+    await contact.save();
+
+    res.json({
+      success: true,
+      message: `Submission rejected: ${contact.rejectionReason}`,
+      data: contact,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -126,10 +427,15 @@ export const bulkCreate = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please provide an array of contacts' });
     }
 
+    const isAdmin = req.user?.role === 'admin';
+
     const formatted = contacts.map((c) => ({
       ...c,
       techStack: Array.isArray(c.techStack) ? c.techStack : (c.techStack || '').split(',').map((s) => s.trim()),
+      status: isAdmin ? 'approved' : 'pending',
+      verified: isAdmin ? true : false,
       createdBy: req.user._id,
+      submittedBy: req.user._id,
     }));
 
     const inserted = await HRContact.insertMany(formatted, { ordered: false });
@@ -142,11 +448,19 @@ export const bulkCreate = async (req, res) => {
 // @route   PUT /api/hr-contacts/:id
 export const updateContact = async (req, res) => {
   try {
-    const { companyName, recruiterName, recruiterEmail, techStack, recruiterTitle, website, location, industry } = req.body;
+    const { companyName, recruiterName, recruiterEmail, techStack, recruiterTitle, website, location, industry, tier } = req.body;
 
     const contact = await HRContact.findById(req.params.id);
     if (!contact) {
       return res.status(404).json({ success: false, message: 'HR contact not found' });
+    }
+
+    const isAdmin = req.user?.role === 'admin';
+    const isOwner = contact.submittedBy && contact.submittedBy.toString() === req.user._id.toString();
+
+    // Only admins or candidate owner of a pending submission can edit
+    if (!isAdmin && (!isOwner || contact.status === 'approved')) {
+      return res.status(403).json({ success: false, message: 'Not authorized to edit this recruiter' });
     }
 
     if (companyName) contact.companyName = companyName.trim();
@@ -159,6 +473,7 @@ export const updateContact = async (req, res) => {
     if (website !== undefined) contact.website = website.trim();
     if (location !== undefined) contact.location = location.trim();
     if (industry !== undefined) contact.industry = industry.trim();
+    if (tier !== undefined) contact.tier = tier;
 
     await contact.save();
     res.json({ success: true, message: 'Contact updated successfully', data: contact });
@@ -170,10 +485,19 @@ export const updateContact = async (req, res) => {
 // @route   DELETE /api/hr-contacts/:id
 export const deleteContact = async (req, res) => {
   try {
-    const contact = await HRContact.findByIdAndDelete(req.params.id);
+    const contact = await HRContact.findById(req.params.id);
     if (!contact) {
       return res.status(404).json({ success: false, message: 'HR contact not found' });
     }
+
+    const isAdmin = req.user?.role === 'admin';
+    const isOwner = contact.submittedBy && contact.submittedBy.toString() === req.user._id.toString();
+
+    if (!isAdmin && (!isOwner || contact.status === 'approved')) {
+      return res.status(403).json({ success: false, message: 'Not authorized to delete this recruiter' });
+    }
+
+    await HRContact.findByIdAndDelete(req.params.id);
 
     // Cascade: Permanently remove this HR contact from all campaigns and delete associated outreach logs
     await Campaign.updateMany(
@@ -191,6 +515,11 @@ export const deleteContact = async (req, res) => {
 // @route   POST /api/hr-contacts/bulk-delete
 export const bulkDeleteContacts = async (req, res) => {
   try {
+    const isAdmin = req.user?.role === 'admin';
+    if (!isAdmin) {
+      return res.status(403).json({ success: false, message: 'Only administrators can perform bulk deletions' });
+    }
+
     const { ids } = req.body;
     if (!Array.isArray(ids) || ids.length === 0) {
       return res.status(400).json({ success: false, message: 'Please provide an array of contact IDs to delete' });
@@ -198,7 +527,6 @@ export const bulkDeleteContacts = async (req, res) => {
 
     const result = await HRContact.deleteMany({ _id: { $in: ids } });
 
-    // Cascade: Permanently remove all selected HR contacts from campaigns and delete associated outreach logs
     await Campaign.updateMany(
       { targetContacts: { $in: ids } },
       { $pull: { targetContacts: { $in: ids } } }

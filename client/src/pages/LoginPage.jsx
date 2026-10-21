@@ -65,6 +65,13 @@ export const LoginPage = () => {
     setTimeout(() => setDemoActive(false), 2000);
   };
 
+  const handleFillAdminDemo = () => {
+    setEmail('admin@techreachly.com');
+    setPassword('Password123!');
+    setDemoActive(true);
+    setTimeout(() => setDemoActive(false), 2000);
+  };
+
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     if (!forgotEmail.trim()) {
@@ -265,24 +272,38 @@ export const LoginPage = () => {
 
               {/* 1-Click Fast Auth & Demo Access */}
               <div className="space-y-2 mb-2.5">
-                {/* 1-Click Recruiter Demo Button */}
-                <button
-                  type="button"
-                  onClick={handleFillDemo}
-                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all duration-200 group ${
-                    demoActive
-                      ? 'border-cyan-500 bg-cyan-500/15 text-cyan-600 dark:text-cyan-300'
-                      : 'border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-cyan-500/10 hover:border-indigo-500/60 text-slate-800 dark:text-zinc-200'
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-cyan-500 group-hover:rotate-12 transition-transform" />
-                    <span>1-Click Recruiter Demo Access</span>
-                  </div>
-                  <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 bg-white dark:bg-zinc-950 px-1.5 py-0.2 rounded border border-slate-200 dark:border-zinc-800">
-                    {demoActive ? 'Applied!' : 'Auto-fill'}
-                  </span>
-                </button>
+                {/* 1-Click Fast Auth & Demo Access */}
+                <div className="grid grid-cols-2 gap-2 mb-2.5">
+                  <button
+                    type="button"
+                    onClick={handleFillDemo}
+                    className="flex items-center justify-between px-2.5 py-1.5 rounded-xl border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 hover:border-indigo-500/60 text-slate-800 dark:text-zinc-200 text-[11px] font-semibold transition-all group cursor-pointer"
+                    title="Fill candidate demo account (demo@techreachly.com)"
+                  >
+                    <div className="flex items-center gap-1.5 truncate">
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                      <span className="truncate">Candidate Demo</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-indigo-600 dark:text-indigo-400 bg-white dark:bg-zinc-950 px-1 py-0.2 rounded border border-slate-200 dark:border-zinc-800 shrink-0">
+                      Auto
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleFillAdminDemo}
+                    className="flex items-center justify-between px-2.5 py-1.5 rounded-xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 hover:border-cyan-500/60 text-slate-800 dark:text-zinc-200 text-[11px] font-semibold transition-all group cursor-pointer"
+                    title="Fill admin moderation account (admin@techreachly.com)"
+                  >
+                    <div className="flex items-center gap-1.5 truncate">
+                      <ShieldCheck className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
+                      <span className="truncate">Admin Demo</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-cyan-600 dark:text-cyan-400 bg-white dark:bg-zinc-950 px-1 py-0.2 rounded border border-slate-200 dark:border-zinc-800 shrink-0">
+                      Auto
+                    </span>
+                  </button>
+                </div>
 
                 {/* Fast Social Sign-In Buttons */}
                 <div className="grid grid-cols-2 gap-2">

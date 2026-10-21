@@ -14,22 +14,13 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { AdminModerationPage } from './pages/AdminModerationPage';
 
-const ProtectedLayout = ({ children }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center saas-bg">
-        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
+/**
+ * Standard App Shell Layout with Navbar and Depth Glow
+ * Accessible to both authenticated users and public visitors (e.g. /directory)
+ */
+const AppLayout = ({ children }) => {
   return (
     <div className="min-h-screen saas-bg text-slate-900 dark:text-zinc-100 flex flex-col antialiased transition-colors duration-200 relative">
       {/* Ambient background glow accents for modern SaaS depth */}
@@ -47,29 +38,79 @@ const ProtectedLayout = ({ children }) => {
   );
 };
 
+/**
+ * Authenticated User Protected Route
+ */
+const ProtectedLayout = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center saas-bg">
+        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <AppLayout>{children}</AppLayout>;
+};
+
+/**
+ * Administrator Only Protected Route
+ */
+const AdminLayout = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center saas-bg">
+        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user.role !== 'admin') {
+    return <Navigate to="/directory" replace />;
+  }
+
+  return <AppLayout>{children}</AppLayout>;
+};
+
 export const App = () => {
   return (
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
+            {/* Standalone Authentication Views */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
 
+            {/* Public / Semi-Public Views */}
+            <Route
+              path="/directory"
+              element={
+                <AppLayout>
+                  <DirectoryPage />
+                </AppLayout>
+              }
+            />
+
+            {/* Authenticated Candidate Views */}
             <Route
               path="/"
               element={
                 <ProtectedLayout>
                   <Dashboard />
-                </ProtectedLayout>
-              }
-            />
-            <Route
-              path="/directory"
-              element={
-                <ProtectedLayout>
-                  <DirectoryPage />
                 </ProtectedLayout>
               }
             />
@@ -114,6 +155,17 @@ export const App = () => {
               }
             />
 
+            {/* Administrator Moderation Suite */}
+            <Route
+              path="/admin"
+              element={
+                <AdminLayout>
+                  <AdminModerationPage />
+                </AdminLayout>
+              }
+            />
+
+            {/* 404 Catch-All */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
