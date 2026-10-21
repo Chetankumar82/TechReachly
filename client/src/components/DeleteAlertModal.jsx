@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { AlertTriangle, Trash2, X } from 'lucide-react';
 
 /**
  * Premium in-app Delete Confirmation Alert Box
  * Portaled to document.body with z-[9999] to ensure it always displays
- * in front of all pages, docks, and footers.
+ * in front of all pages, docks, and footers with strict focus trap.
  */
 export const DeleteAlertModal = ({
   isOpen,
@@ -19,19 +19,51 @@ export const DeleteAlertModal = ({
   isDeleting = false,
   dangerIcon = 'trash', // 'trash' | 'alert'
 }) => {
-  // Handle ESC key to dismiss modal
+  const dialogRef = useRef(null);
+  const cancelButtonRef = useRef(null);
+
+  // Focus trap and ESC key listener
   useEffect(() => {
+    if (!isOpen) return;
+
+    // Auto-focus cancel button on open (safest default for destructive actions)
+    const timer = setTimeout(() => {
+      cancelButtonRef.current?.focus();
+    }, 50);
+
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isOpen && !isDeleting) {
+      if (e.key === 'Escape' && !isDeleting) {
         onClose();
+        return;
+      }
+
+      // Focus trap
+      if (e.key === 'Tab' && dialogRef.current) {
+        const focusableElements = dialogRef.current.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
       }
     };
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      // Prevent body scrolling while modal is open
-      document.body.style.overflow = 'hidden';
-    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+
     return () => {
+      clearTimeout(timer);
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
     };
@@ -44,6 +76,7 @@ export const DeleteAlertModal = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="alert-dialog-title"
+      ref={dialogRef}
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/65 dark:bg-black/80 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget && !isDeleting) {
@@ -97,9 +130,10 @@ export const DeleteAlertModal = ({
         <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100 dark:border-zinc-850">
           <button
             type="button"
+            ref={cancelButtonRef}
             onClick={onClose}
             disabled={isDeleting}
-            className="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-zinc-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50 cursor-pointer"
+            className="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-zinc-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             {cancelText}
           </button>
@@ -111,7 +145,7 @@ export const DeleteAlertModal = ({
               if (onConfirm) onConfirm();
             }}
             disabled={isDeleting}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-500 shadow-sm transition-all disabled:opacity-50 active:scale-[0.98] cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-500 shadow-sm transition-all disabled:opacity-50 active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-500"
           >
             {isDeleting ? (
               <>

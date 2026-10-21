@@ -351,12 +351,24 @@ Key Requirements:
 
   const handleLaunchCampaign = async () => {
     if (!campaignName.trim()) {
-      setMessage({ text: 'Please enter a campaign name', type: 'error' });
+      setMessage({ text: 'Please enter a campaign name before launching.', type: 'error' });
       return;
     }
 
-    if (!sequenceTemplates.step1.subject || !sequenceTemplates.step1.body) {
-      setMessage({ text: 'Please generate or enter the Step 1 email subject and body', type: 'error' });
+    if (!selectedContacts || selectedContacts.length === 0) {
+      setMessage({
+        text: 'Please select at least 1 target recruiter from the HR Directory before launching.',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!sequenceTemplates.step1.subject?.trim() || !sequenceTemplates.step1.body?.trim()) {
+      setActiveStepTab(1);
+      setMessage({
+        text: 'Please draft or generate the Step 1 (Day 0) pitch email subject and body before launching.',
+        type: 'error',
+      });
       return;
     }
 
@@ -1583,7 +1595,10 @@ Key Requirements:
         <div className="p-4 bg-slate-50 dark:bg-zinc-900 border-t border-slate-200 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-3 text-slate-600 dark:text-zinc-400">
             <span>
-              Recipients queued: <strong className="text-slate-900 dark:text-zinc-200">{selectedContacts.length}</strong>
+              Recipients queued:{' '}
+              <strong className={selectedContacts.length > 0 ? 'text-slate-900 dark:text-zinc-200' : 'text-amber-600 dark:text-amber-400 font-bold'}>
+                {selectedContacts.length === 0 ? '0 (None selected)' : selectedContacts.length}
+              </strong>
             </span>
             <span>•</span>
             <span className="flex items-center gap-1">
@@ -1619,7 +1634,7 @@ Key Requirements:
               ) : (
                 <>
                   <Send className="w-3.5 h-3.5" />
-                  <span>Launch Cadence</span>
+                  <span>{selectedContacts.length > 0 ? `Launch to ${selectedContacts.length} Recruiter${selectedContacts.length > 1 ? 's' : ''}` : 'Launch Cadence'}</span>
                 </>
               )}
             </button>

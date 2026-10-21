@@ -19,6 +19,8 @@ import {
   Download,
   Sparkles,
   Filter,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 
 const COMPANY_TIERS = [
@@ -36,6 +38,12 @@ export const DirectoryPage = () => {
   const [techStacks, setTechStacks] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(15);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   // Filters initialized from URL query params (e.g., from Dashboard tech stack clicks)
   const [search, setSearch] = useState(searchParams.get('search') || '');
@@ -70,10 +78,13 @@ export const DirectoryPage = () => {
     industry: 'IT / Software',
   });
 
-  const fetchContacts = async () => {
+  const fetchContacts = async (targetPage = page, targetLimit = limit) => {
     setLoading(true);
     try {
-      const params = {};
+      const params = {
+        page: targetPage,
+        limit: targetLimit,
+      };
       if (search) params.search = search;
       if (selectedStack) params.techStack = selectedStack;
       if (selectedTier && selectedTier !== 'all') params.tier = selectedTier;
@@ -81,6 +92,9 @@ export const DirectoryPage = () => {
       const res = await api.get('/hr-contacts', { params });
       if (res.data?.success) {
         setContacts(res.data.data || []);
+        setTotal(res.data.total ?? (res.data.data || []).length);
+        setTotalPages(res.data.pages || 1);
+        setPage(res.data.page || targetPage);
       }
     } catch (err) {
       console.error('Failed to load contacts:', err);
@@ -104,12 +118,28 @@ export const DirectoryPage = () => {
     fetchTechStacks();
   }, []);
 
+  // When search or filter changes, reset to page 1
   useEffect(() => {
+    setPage(1);
     const timer = setTimeout(() => {
-      fetchContacts();
+      fetchContacts(1, limit);
     }, 200);
     return () => clearTimeout(timer);
   }, [search, selectedStack, selectedTier]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages && newPage !== page) {
+      setPage(newPage);
+      fetchContacts(newPage, limit);
+    }
+  };
+
+  const handleLimitChange = (newLimit) => {
+    const lim = Number(newLimit);
+    setLimit(lim);
+    setPage(1);
+    fetchContacts(1, lim);
+  };
 
   const handleExportCsv = (contactsToExport = null) => {
     const list = contactsToExport || (selectedIds.length > 0
@@ -592,6 +622,63 @@ export const DirectoryPage = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Bar */}
+        {total > 0 && (
+          <div className="px-4 py-3 border-t border-slate-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-zinc-400">
+            <div className="flex items-center gap-1.5">
+              <span>Showing</span>
+              <span className="font-semibold text-slate-800 dark:text-zinc-200 font-mono">
+                {(page - 1) * limit + 1}–{Math.min(page * limit, total)}
+              </span>
+              <span>of</span>
+              <span className="font-semibold text-slate-800 dark:text-zinc-200 font-mono">{total}</span>
+              <span>recruiters</span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] text-slate-400 dark:text-zinc-500">Per page:</span>
+                <select
+                  value={limit}
+                  onChange={(e) => handleLimitChange(e.target.value)}
+                  className="px-2 py-1 rounded-lg border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-800 dark:text-zinc-200 text-xs focus:outline-none focus:border-indigo-500 font-mono"
+                >
+                  <option value={10}>10</option>
+                  <option value={15}>15</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  disabled={page <= 1 || loading}
+                  onClick={() => handlePageChange(page - 1)}
+                  className="p-1.5 rounded-lg border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  aria-label="Previous page"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                <div className="px-2 font-mono text-xs text-slate-700 dark:text-zinc-300 font-semibold">
+                  Page {page} of {totalPages}
+                </div>
+
+                <button
+                  type="button"
+                  disabled={page >= totalPages || loading}
+                  onClick={() => handlePageChange(page + 1)}
+                  className="p-1.5 rounded-lg border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                  aria-label="Next page"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Floating Bottom Selection Dock */}
