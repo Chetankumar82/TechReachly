@@ -31,7 +31,7 @@ export const getDashboardStats = async (req, res) => {
     const resume = await Resume.findOne({ userId }).select('fileName parsedData.currentRole parsedData.skills updatedAt');
 
     // Total available HRs in directory
-    const totalDirectoryHRs = await HRContact.countDocuments();
+    const totalDirectoryHRs = await HRContact.countDocuments({ status: { $in: ['approved', null] } });
 
     // Past 7-day timeline breakdown
     const now = new Date();

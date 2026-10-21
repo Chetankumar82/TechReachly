@@ -47,6 +47,7 @@ export const getContacts = async (req, res) => {
       query.$or = [
         { companyName: { $regex: search, $options: 'i' } },
         { recruiterName: { $regex: search, $options: 'i' } },
+        { recruiterEmail: { $regex: search, $options: 'i' } },
         { recruiterTitle: { $regex: search, $options: 'i' } },
         { techStack: { $regex: search, $options: 'i' } },
         { location: { $regex: search, $options: 'i' } },
