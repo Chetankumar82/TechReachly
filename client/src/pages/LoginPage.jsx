@@ -36,7 +36,6 @@ export const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [demoActive, setDemoActive] = useState(false);
 
   // Forgot Password modal state
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -56,20 +55,6 @@ export const LoginPage = () => {
       setError(res.message);
       setLoading(false);
     }
-  };
-
-  const handleFillDemo = () => {
-    setEmail('demo@techreachly.com');
-    setPassword('Password123!');
-    setDemoActive(true);
-    setTimeout(() => setDemoActive(false), 2000);
-  };
-
-  const handleFillAdminDemo = () => {
-    setEmail('admin@techreachly.com');
-    setPassword('Password123!');
-    setDemoActive(true);
-    setTimeout(() => setDemoActive(false), 2000);
   };
 
   const handleForgotPassword = async (e) => {
@@ -279,84 +264,48 @@ export const LoginPage = () => {
                 </p>
               </div>
 
-              {/* 1-Click Fast Auth & Demo Access */}
-              <div className="space-y-2 mb-2.5">
-                {/* 1-Click Fast Auth & Demo Access */}
-                <div className="grid grid-cols-2 gap-2 mb-2.5">
-                  <button
-                    type="button"
-                    onClick={handleFillDemo}
-                    className="flex items-center justify-between px-2.5 py-1.5 rounded-xl border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 hover:border-indigo-500/60 text-slate-800 dark:text-zinc-200 text-[11px] font-semibold transition-all group cursor-pointer"
-                    title="Fill candidate demo account (demo@techreachly.com)"
-                  >
-                    <div className="flex items-center gap-1.5 truncate">
-                      <Sparkles className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                      <span className="truncate">Candidate Demo</span>
-                    </div>
-                    <span className="text-[9px] font-mono text-indigo-600 dark:text-indigo-400 bg-white dark:bg-zinc-950 px-1 py-0.2 rounded border border-slate-200 dark:border-zinc-800 shrink-0">
-                      Auto
-                    </span>
-                  </button>
+              {/* Social Sign-In Buttons */}
+              <div className="grid grid-cols-2 gap-2 mb-2.5">
+                <button
+                  type="button"
+                  onClick={() => setError('Google sign-in requires OAuth client ID configuration in environment settings.')}
+                  className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700/60 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 rounded-lg text-xs font-medium transition-colors"
+                >
+                  <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24">
+                    <path
+                      d="M12 5c1.56 0 2.96.54 4.07 1.43l3.05-3.05C17.27 1.63 14.81 1 12 1 7.46 1 3.59 3.58 1.66 7.36l3.69 2.86C6.23 7.33 8.87 5 12 5z"
+                      fill="#EA4335"
+                    />
+                    <path
+                      d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.7 2.87c2.16-2 3.72-4.94 3.72-8.69z"
+                      fill="#4285F4"
+                    />
+                    <path
+                      d="M5.35 14.78c-.24-.72-.37-1.49-.37-2.28s.13-1.56.37-2.28L1.66 7.36C.6 9.47 0 11.66 0 14s.6 4.53 1.66 6.64l3.69-2.86z"
+                      fill="#FBBC05"
+                    />
+                    <path
+                      d="M12 23c3.24 0 5.95-1.08 7.93-2.91l-3.7-2.87c-1.08.72-2.45 1.16-4.23 1.16-3.13 0-5.77-2.33-6.65-5.22L1.66 16c1.93 3.78 5.8 6.36 10.34 6.36z"
+                      fill="#34A853"
+                    />
+                  </svg>
+                  <span>Google</span>
+                </button>
 
-                  <button
-                    type="button"
-                    onClick={handleFillAdminDemo}
-                    className="flex items-center justify-between px-2.5 py-1.5 rounded-xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 hover:border-cyan-500/60 text-slate-800 dark:text-zinc-200 text-[11px] font-semibold transition-all group cursor-pointer"
-                    title="Fill admin moderation account (admin@techreachly.com)"
-                  >
-                    <div className="flex items-center gap-1.5 truncate">
-                      <ShieldCheck className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
-                      <span className="truncate">Admin Demo</span>
-                    </div>
-                    <span className="text-[9px] font-mono text-cyan-600 dark:text-cyan-400 bg-white dark:bg-zinc-950 px-1 py-0.2 rounded border border-slate-200 dark:border-zinc-800 shrink-0">
-                      Auto
-                    </span>
-                  </button>
-                </div>
-
-                {/* Fast Social Sign-In Buttons */}
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={handleFillDemo}
-                    className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700/60 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 rounded-lg text-xs font-medium transition-colors"
-                  >
-                    <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24">
-                      <path
-                        d="M12 5c1.56 0 2.96.54 4.07 1.43l3.05-3.05C17.27 1.63 14.81 1 12 1 7.46 1 3.59 3.58 1.66 7.36l3.69 2.86C6.23 7.33 8.87 5 12 5z"
-                        fill="#EA4335"
-                      />
-                      <path
-                        d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.7 2.87c2.16-2 3.72-4.94 3.72-8.69z"
-                        fill="#4285F4"
-                      />
-                      <path
-                        d="M5.35 14.78c-.24-.72-.37-1.49-.37-2.28s.13-1.56.37-2.28L1.66 7.36C.6 9.47 0 11.66 0 14s.6 4.53 1.66 6.64l3.69-2.86z"
-                        fill="#FBBC05"
-                      />
-                      <path
-                        d="M12 23c3.24 0 5.95-1.08 7.93-2.91l-3.7-2.87c-1.08.72-2.45 1.16-4.23 1.16-3.13 0-5.77-2.33-6.65-5.22L1.66 16c1.93 3.78 5.8 6.36 10.34 6.36z"
-                        fill="#34A853"
-                      />
-                    </svg>
-                    <span>Google</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleFillDemo}
-                    className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700/60 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 rounded-lg text-xs font-medium transition-colors"
-                  >
-                    <svg className="w-3 h-3 fill-current shrink-0" viewBox="0 0 24 24">
-                      <path
-                        clipRule="evenodd"
-                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                        fillRule="evenodd"
-                      />
-                    </svg>
-                    <span>GitHub</span>
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setError('GitHub sign-in requires OAuth app client credentials in environment settings.')}
+                  className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700/60 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 rounded-lg text-xs font-medium transition-colors"
+                >
+                  <svg className="w-3 h-3 fill-current shrink-0" viewBox="0 0 24 24">
+                    <path
+                      clipRule="evenodd"
+                      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                      fillRule="evenodd"
+                    />
+                  </svg>
+                  <span>GitHub</span>
+                </button>
               </div>
 
               {/* Divider */}
@@ -389,7 +338,7 @@ export const LoginPage = () => {
                     <input
                       type="email"
                       required
-                      placeholder="demo@techreachly.com"
+                      placeholder="your.email@company.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full pl-8 pr-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all text-xs"
@@ -491,12 +440,12 @@ export const LoginPage = () => {
 
               {/* Registration Callout Link */}
               <div className="mt-2 text-center text-[11px] text-slate-500 dark:text-zinc-400">
-                Don't have an enterprise workspace?{' '}
+                New candidate looking for outreach?{' '}
                 <Link
                   to="/register"
                   className="text-indigo-600 dark:text-cyan-400 font-semibold hover:underline"
                 >
-                  Start 14-day free trial →
+                  Create 100% Free Account →
                 </Link>
               </div>
             </div>
