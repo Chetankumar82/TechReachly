@@ -83,6 +83,8 @@ export const DirectoryPage = () => {
   // Modals & Action States
   const [showContributeModal, setShowContributeModal] = useState(false);
   const [unlockModal, setUnlockModal] = useState({ isOpen: false, recruiter: null });
+  const [detailContact, setDetailContact] = useState(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
   const [savingEdit, setSavingEdit] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
@@ -657,7 +659,11 @@ export const DirectoryPage = () => {
                           </td>
 
                           <td className="py-3 px-4">
-                            <div className="font-semibold text-slate-900 dark:text-zinc-100 group-hover:dark:text-white flex items-center gap-1.5 transition-colors">
+                            <div
+                              onClick={() => setDetailContact(contact)}
+                              className="font-semibold text-slate-900 dark:text-zinc-100 group-hover:dark:text-white flex items-center gap-1.5 transition-colors cursor-pointer hover:underline"
+                              title="Click to view full recruiter profile"
+                            >
                               {contact.companyName}
                               {contact.verified && (
                                 <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" title="Verified Recruiter" />
@@ -679,7 +685,11 @@ export const DirectoryPage = () => {
                           </td>
 
                           <td className="py-3 px-4">
-                            <div className="font-medium text-slate-800 dark:text-zinc-200 group-hover:dark:text-white transition-colors">
+                            <div
+                              onClick={() => setDetailContact(contact)}
+                              className="font-medium text-slate-800 dark:text-zinc-200 group-hover:dark:text-white transition-colors cursor-pointer hover:underline"
+                              title="Click to view full recruiter profile"
+                            >
                               {contact.recruiterName}
                             </div>
                             <div className="text-[11px] text-slate-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5 font-mono">
@@ -731,6 +741,15 @@ export const DirectoryPage = () => {
 
                           <td className="py-3 px-4 text-right">
                             <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => setDetailContact(contact)}
+                                className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                                title="View full recruiter profile details"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                              </button>
+
                               {isGuest ? (
                                 <button
                                   type="button"
@@ -1227,6 +1246,174 @@ export const DirectoryPage = () => {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* MODAL: FULL HR PROFILE & CONTACT DOSSIER */}
+      {detailContact && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md animate-in fade-in">
+          <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-3xl p-5 sm:p-6 max-w-lg w-full shadow-2xl space-y-4 relative">
+            <button
+              type="button"
+              onClick={() => {
+                setDetailContact(null);
+                setCopiedEmail(false);
+              }}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:text-zinc-400 dark:hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Profile Header */}
+            <div className="flex items-start gap-3.5 pr-8">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-400 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-md">
+                {detailContact.recruiterName ? detailContact.recruiterName.slice(0, 2).toUpperCase() : 'HR'}
+              </div>
+
+              <div className="space-y-0.5 min-w-0">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white truncate">
+                    {detailContact.recruiterName}
+                  </h3>
+                  {detailContact.verified && (
+                    <CheckCircle2 className="w-4 h-4 text-indigo-600 dark:text-cyan-400 shrink-0" title="Verified Engineering Recruiter" />
+                  )}
+                </div>
+                <p className="text-xs font-medium text-slate-600 dark:text-zinc-300">
+                  {detailContact.recruiterTitle || 'Technical Recruiter'}
+                </p>
+                <div className="flex items-center gap-2 pt-0.5 flex-wrap">
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400 text-xs">
+                    {detailContact.companyName}
+                  </span>
+                  <span className="text-slate-300 dark:text-zinc-700">•</span>
+                  <span className="text-[11px] text-slate-500 dark:text-zinc-400">
+                    {detailContact.industry || 'IT / Software'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Recruiter Details Grid */}
+            <div className="grid grid-cols-2 gap-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-zinc-800/60 border border-slate-100 dark:border-zinc-800 text-xs">
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-zinc-500">Location</span>
+                <p className="font-medium text-slate-800 dark:text-zinc-200 mt-0.5 flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                  <span>{detailContact.location || 'Remote / Hybrid'}</span>
+                </p>
+              </div>
+
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-zinc-500">Company Website</span>
+                <p className="font-medium text-slate-800 dark:text-zinc-200 mt-0.5">
+                  {detailContact.website ? (
+                    <a
+                      href={detailContact.website}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-indigo-600 hover:underline inline-flex items-center gap-0.5"
+                    >
+                      <span>Visit Site</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  ) : (
+                    <span className="text-slate-400">Not provided</span>
+                  )}
+                </p>
+              </div>
+            </div>
+
+            {/* Work Email Bar */}
+            <div className="p-3 rounded-2xl bg-indigo-50/60 dark:bg-zinc-950/70 border border-indigo-100 dark:border-zinc-800 space-y-1">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-600 dark:text-cyan-400">
+                Official Corporate Email
+              </span>
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-xs text-slate-900 dark:text-white font-medium select-all">
+                  {detailContact.recruiterEmail}
+                </span>
+
+                {isGuest ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDetailContact(null);
+                      setUnlockModal({ isOpen: true, recruiter: detailContact });
+                    }}
+                    className="px-2.5 py-1 rounded-lg text-[11px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-all cursor-pointer"
+                  >
+                    Unlock Full Email
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(detailContact.recruiterEmail);
+                      setCopiedEmail(true);
+                      setTimeout(() => setCopiedEmail(false), 2000);
+                    }}
+                    className="px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-700 dark:text-zinc-300 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                  >
+                    {copiedEmail ? 'Copied!' : 'Copy'}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Hiring Tech Stack */}
+            <div className="space-y-1.5">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-zinc-300">
+                Target Engineering Tech Stack
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {(detailContact.techStack || []).map((tech, i) => (
+                  <span
+                    key={i}
+                    className="px-2.5 py-1 rounded-lg text-xs bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 font-medium"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-zinc-800">
+              <button
+                type="button"
+                onClick={() => setDetailContact(null)}
+                className="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
+              >
+                Close
+              </button>
+
+              {isGuest ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDetailContact(null);
+                    setUnlockModal({ isOpen: true, recruiter: detailContact });
+                  }}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-all cursor-pointer shadow-md shadow-indigo-600/20"
+                >
+                  Create Account to Pitch Recruiter
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDetailContact(null);
+                    navigate('/campaign/new', { state: { selectedContactIds: [detailContact._id] } });
+                  }}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-all cursor-pointer shadow-md shadow-indigo-600/20 flex items-center gap-1.5"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Launch Cold Outreach</span>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       )}
 

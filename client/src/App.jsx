@@ -84,6 +84,37 @@ const AdminLayout = ({ children }) => {
   return <AppLayout>{children}</AppLayout>;
 };
 
+/**
+ * Home Route:
+ * If authenticated -> Renders Dashboard
+ * If guest / unauthenticated -> Renders the public Engineering Recruiter Directory
+ */
+const HomeRoute = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center saas-bg">
+        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <AppLayout>
+        <DirectoryPage />
+      </AppLayout>
+    );
+  }
+
+  return (
+    <ProtectedLayout>
+      <Dashboard />
+    </ProtectedLayout>
+  );
+};
+
 export const App = () => {
   return (
     <ThemeProvider>
@@ -95,23 +126,16 @@ export const App = () => {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-            {/* Public / Semi-Public Views */}
+            {/* Root Route: Shows Dashboard if logged in, shows HR Directory if unauthenticated */}
+            <Route path="/" element={<HomeRoute />} />
+
+            {/* Dedicated Public HR Directory View */}
             <Route
               path="/directory"
               element={
                 <AppLayout>
                   <DirectoryPage />
                 </AppLayout>
-              }
-            />
-
-            {/* Authenticated Candidate Views */}
-            <Route
-              path="/"
-              element={
-                <ProtectedLayout>
-                  <Dashboard />
-                </ProtectedLayout>
               }
             />
             <Route

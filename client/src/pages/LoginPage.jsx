@@ -122,6 +122,15 @@ export const LoginPage = () => {
             <span>SOC-2 Type II Certified</span>
           </div>
 
+          <Link
+            to="/directory"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-indigo-600 dark:text-cyan-400 transition-colors cursor-pointer"
+            title="Browse verified engineering recruiters without logging in"
+          >
+            <Users className="w-3.5 h-3.5" />
+            <span className="hidden xs:inline">Browse Directory</span>
+          </Link>
+
           <div className="h-3.5 w-[1px] bg-slate-200 dark:border-zinc-800 hidden sm:block" />
 
           {/* Theme Toggle */}
