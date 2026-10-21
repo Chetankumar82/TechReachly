@@ -384,6 +384,54 @@ const seedDatabase = async () => {
       console.log('[Seed] Demo user already exists.');
     }
 
+    // Seed / Ensure Admin user exists with synced configuration
+    const existingAdmin = await User.findOne({ email: 'admin@techreachly.com' });
+    const demo = await User.findOne({ email: 'demo@techreachly.com' });
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash('Password123!', salt);
+
+    if (!existingAdmin) {
+      await User.create({
+        name: 'Platform Administrator',
+        email: 'admin@techreachly.com',
+        passwordHash,
+        role: 'admin',
+        geminiApiKey: demo?.geminiApiKey || '',
+        smtpConfig: demo?.smtpConfig || {
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          authUser: 'admin@techreachly.com',
+          senderName: 'Platform Administrator',
+          verified: true,
+        },
+        outreachSettings: demo?.outreachSettings || {
+          dailyLimit: 25,
+          minDelaySeconds: 180,
+          maxDelaySeconds: 360,
+          autoFollowUp: true,
+          followUpDelayDays: 3,
+        },
+      });
+      console.log('[Seed] Admin user created: admin@techreachly.com / Password123!');
+    } else if (demo) {
+      existingAdmin.geminiApiKey = demo.geminiApiKey || existingAdmin.geminiApiKey;
+      if (demo.smtpConfig && demo.smtpConfig.authPass) {
+        existingAdmin.smtpConfig = {
+          host: demo.smtpConfig.host || 'smtp.gmail.com',
+          port: demo.smtpConfig.port || 465,
+          secure: demo.smtpConfig.secure ?? true,
+          authUser: demo.smtpConfig.authUser,
+          authPass: demo.smtpConfig.authPass,
+          senderName: demo.smtpConfig.senderName || 'Platform Administrator',
+          verified: demo.smtpConfig.verified ?? true,
+          lastVerifiedAt: demo.smtpConfig.lastVerifiedAt || new Date(),
+        };
+      }
+      await existingAdmin.save();
+      console.log('[Seed] Synchronized Admin credentials from Demo profile.');
+    }
+
     console.log('[Seed] Database seeding completed successfully.');
     process.exit(0);
   } catch (error) {
