@@ -9,7 +9,7 @@ import { sendOutreachEmail } from '../services/mailerService.js';
 // @route   POST /api/campaigns/match-score
 export const analyzeJdMatch = async (req, res) => {
   try {
-    const { jobDescription, model = 'gemini-2.0-flash', apiKey } = req.body;
+    const { jobDescription, model = 'gemini-3.8-flash', apiKey } = req.body;
 
     if (!jobDescription || jobDescription.trim().length < 15) {
       return res.status(400).json({
@@ -44,7 +44,7 @@ export const analyzeJdMatch = async (req, res) => {
 // @route   POST /api/campaigns/generate-pitch
 export const generateAiPitches = async (req, res) => {
   try {
-    const { hrContactId, jobDescription, tone = 'confident & polite', model = 'gemini-2.0-flash', apiKey } = req.body;
+    const { hrContactId, jobDescription, tone = 'confident & polite', model = 'gemini-3.8-flash', apiKey } = req.body;
 
     const resume = await Resume.findOne({ userId: req.user._id });
     if (!resume || !resume.parsedData) {
@@ -97,7 +97,7 @@ export const generateAiPitches = async (req, res) => {
 // @route   POST /api/campaigns/generate-subject-lines
 export const generateSubjectLinesController = async (req, res) => {
   try {
-    const { hrContactId, jobDescription, model = 'gemini-2.0-flash', apiKey } = req.body;
+    const { hrContactId, jobDescription, model = 'gemini-3.8-flash', apiKey } = req.body;
 
     const resume = await Resume.findOne({ userId: req.user._id });
     if (!resume || !resume.parsedData) {

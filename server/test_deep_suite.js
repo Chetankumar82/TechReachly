@@ -424,7 +424,7 @@ async function runDeepTestSuite() {
       companyName: 'Razorpay',
       recruiterName: 'Priya Sharma',
       persona: 'metrics',
-      modelId: 'gemini-2.0-flash',
+      modelId: 'gemini-3.8-flash',
     }),
   });
   const pitchData = await pitchRes.json();

@@ -11,31 +11,42 @@ export const getAiClient = (customApiKey = null) => {
 
 /**
  * Unified Gemini API runner with automatic model failover and strict timeout protection.
- * Tries fast models first (gemini-2.0-flash, gemini-1.5-flash) with graceful cascade.
+ * Uses high-performance Gemini 3.8 Flash by default, with graceful cascade to Gemini 3.5 Flash and Gemini Flash Latest.
  */
-export const callGeminiPrompt = async (ai, { model = 'gemini-2.0-flash', prompt }) => {
-  let requested = model;
-  // Map legacy/fictional model IDs to real Gemini model IDs
+export const callGeminiPrompt = async (ai, { model = 'gemini-3.8-flash', prompt }) => {
+  let requested = model || 'gemini-3.8-flash';
+  
+  // Normalize legacy and variant model IDs to active production models
   const modelMap = {
-    'gemini-3-flash-preview': 'gemini-2.0-flash',
-    'gemini-3.5-flash': 'gemini-1.5-flash',
-    'gemini-4-argon': 'gemini-1.5-pro',
-    'gemini-2.5-flash': 'gemini-2.0-flash',
-    'gemini-2.0-flash': 'gemini-2.0-flash',
-    'gemini-1.5-flash': 'gemini-1.5-flash',
-    'gemini-1.5-pro': 'gemini-1.5-pro',
+    'gemini-3.8-flash': 'gemini-3.8-flash',
+    'gemini-3.5-flash': 'gemini-3.5-flash',
+    'gemini-3.5-flash-lite': 'gemini-3.5-flash-lite',
+    'gemini-flash-latest': 'gemini-flash-latest',
+    'gemini-flash-lite-latest': 'gemini-flash-lite-latest',
+    'gemini-4-argon': 'gemini-4-argon',
+    'gemini-3.1-flash-lite': 'gemini-3.1-flash-lite',
+    // Deprecated legacy models -> transparently substitute with modern Gemini 3.8 Flash
+    'gemini-2.0-flash': 'gemini-3.8-flash',
+    'gemini-2.5-flash': 'gemini-3.8-flash',
+    'gemini-1.5-flash': 'gemini-3.8-flash',
+    'gemini-1.5-pro': 'gemini-4-argon',
+    'gemini-2.5-pro': 'gemini-4-argon',
+    'gemini-3-flash-preview': 'gemini-3.8-flash',
   };
+
   requested = modelMap[requested] || (
-    requested.includes('pro') || requested.includes('argon') ? 'gemini-1.5-pro' :
-    requested.includes('1.5-flash') ? 'gemini-1.5-flash' :
-    'gemini-2.0-flash'
+    requested.includes('argon') ? 'gemini-4-argon' :
+    requested.includes('3.5') ? 'gemini-3.5-flash' :
+    'gemini-3.8-flash'
   );
 
-  // Model cascade priority: requested model -> gemini-2.0-flash -> gemini-1.5-flash
+  // Model cascade priority: requested model -> gemini-3.8-flash -> gemini-3.5-flash -> gemini-flash-latest -> gemini-flash-lite-latest
   const candidateModels = [
     requested,
-    'gemini-2.0-flash',
-    'gemini-1.5-flash',
+    'gemini-3.8-flash',
+    'gemini-3.5-flash',
+    'gemini-flash-latest',
+    'gemini-flash-lite-latest',
   ].filter((v, i, a) => Boolean(v) && a.indexOf(v) === i);
 
   let lastError = null;
@@ -65,7 +76,7 @@ export const callGeminiPrompt = async (ai, { model = 'gemini-2.0-flash', prompt 
 };
 
 /**
- * Test a Gemini API key with a fast ping using gemini-2.0-flash
+ * Test a Gemini API key with a fast ping using gemini-3.8-flash
  */
 export const testGeminiApiKey = async (apiKey) => {
   try {
@@ -73,12 +84,12 @@ export const testGeminiApiKey = async (apiKey) => {
     if (!ai) return { success: false, message: 'API key cannot be empty' };
 
     const text = await callGeminiPrompt(ai, {
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.8-flash',
       prompt: 'Ping test. Reply with: OK',
     });
 
     if (text) {
-      return { success: true, message: 'Gemini API Key is valid and active (Gemini 2.0 Flash)!' };
+      return { success: true, message: 'Gemini API Key is valid and active (Gemini 3.8 Flash)!' };
     }
     return { success: false, message: 'No response from Gemini API' };
   } catch (err) {
@@ -393,7 +404,7 @@ Return ONLY pure JSON. No markdown backticks, no explanations.
 
   try {
     const text = await callGeminiPrompt(ai, {
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.8-flash',
       prompt,
     });
 
@@ -748,7 +759,7 @@ export const generateSpeculativePitch = async ({
   hrContact,
   jobDescription = '',
   tone = 'confident & polite',
-  model = 'gemini-2.0-flash',
+  model = 'gemini-3.8-flash',
   apiKey = null,
 }) => {
   const ai = getAiClient(apiKey);
@@ -993,12 +1004,12 @@ Return ONLY pure JSON.
 `;
   }
 
-  // Model selection: map to real Gemini model IDs
-  const targetModel = model && (model.includes('argon') || model.includes('pro') || model.includes('1.5-pro'))
-    ? 'gemini-1.5-pro'
-    : (model && (model.includes('3.5') || model.includes('1.5-flash')))
-      ? 'gemini-1.5-flash'
-      : 'gemini-2.0-flash';
+  // Model selection: map to real active Gemini model IDs
+  const targetModel = model && (model.includes('argon') || model.includes('pro'))
+    ? 'gemini-4-argon'
+    : (model && model.includes('3.5'))
+      ? 'gemini-3.5-flash'
+      : 'gemini-3.8-flash';
 
   try {
     const text = await callGeminiPrompt(ai, {
@@ -1136,7 +1147,7 @@ export const analyzeJobDescriptionMatch = async ({
   candidateProfile,
   jobDescription,
   apiKey = null,
-  model = 'gemini-2.0-flash',
+  model = 'gemini-3.8-flash',
 }) => {
   if (!jobDescription || jobDescription.trim().length < 20) {
     throw new Error('Please provide a substantive Job Description with at least 20 characters.');
@@ -1147,11 +1158,11 @@ export const analyzeJobDescriptionMatch = async ({
     return fallbackJdMatchHeuristic({ candidateProfile, jobDescription });
   }
 
-  const targetModel = model && (model.includes('argon') || model.includes('pro') || model.includes('1.5-pro'))
-    ? 'gemini-1.5-pro'
-    : (model && (model.includes('3.5') || model.includes('1.5-flash')))
-      ? 'gemini-1.5-flash'
-      : 'gemini-2.0-flash';
+  const targetModel = model && (model.includes('argon') || model.includes('pro'))
+    ? 'gemini-4-argon'
+    : (model && model.includes('3.5'))
+      ? 'gemini-3.5-flash'
+      : 'gemini-3.8-flash';
 
   const prompt = `
 You are a senior technical recruiter and hiring bar evaluator analyzing a candidate's resume against an open Job Description.
@@ -1313,7 +1324,7 @@ export const generateSubjectLineVariations = async ({
   candidateProfile,
   hrContact,
   jobDescription = '',
-  model = 'gemini-2.0-flash',
+  model = 'gemini-3.8-flash',
   apiKey = null,
 }) => {
   const fallback = buildFallbackSubjectLines({ candidateProfile, hrContact });

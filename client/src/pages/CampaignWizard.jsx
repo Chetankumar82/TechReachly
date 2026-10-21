@@ -88,7 +88,7 @@ export const CampaignWizard = () => {
   // Cadence Options
   const [outreachMode, setOutreachMode] = useState('with_jd'); // 'with_jd' | 'speculative'
   const [jobDescription, setJobDescription] = useState('');
-  const [model, setModel] = useState('gemini-2.0-flash'); // 'gemini-2.0-flash' | 'gemini-1.5-flash' | 'gemini-1.5-pro'
+  const [model, setModel] = useState('gemini-3.8-flash'); // 'gemini-3.8-flash' | 'gemini-3.5-flash' | 'gemini-4-argon'
   const [tone, setTone] = useState('concise');
   const [customApiKey, setCustomApiKey] = useState('');
   const [message, setMessage] = useState({ text: '', type: '' });
@@ -888,9 +888,9 @@ Key Requirements:
                   onChange={(e) => setModel(e.target.value)}
                   className="px-3 py-1.5 rounded-lg saas-input text-xs font-medium"
                 >
-                  <option value="gemini-2.0-flash">Gemini 2.0 Flash (Fastest & Ultra Reliable)</option>
-                  <option value="gemini-1.5-flash">Gemini 1.5 Flash (Balanced Intelligence)</option>
-                  <option value="gemini-1.5-pro">Gemini 1.5 Pro (Deep Strategic Reasoning)</option>
+                  <option value="gemini-3.8-flash">Gemini 3.8 Flash (Recommended • Ultra Fast & Reliable)</option>
+                  <option value="gemini-3.5-flash">Gemini 3.5 Flash (Balanced High-Speed Output)</option>
+                  <option value="gemini-4-argon">Gemini 4 Argon (Deep Reasoning & Strategic Pitching)</option>
                 </select>
               </div>
 
