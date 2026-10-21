@@ -368,7 +368,7 @@ export const SettingsPage = () => {
               <label className="block text-slate-700 dark:text-zinc-300 font-medium mb-1">Sender Name</label>
               <input
                 type="text"
-                placeholder="e.g. Alex Kumar"
+                placeholder="e.g. Alex Morgan"
                 value={smtp.senderName}
                 onChange={(e) => setSmtp({ ...smtp, senderName: e.target.value })}
                 className="w-full px-3 py-1.5 rounded-lg saas-input text-xs"

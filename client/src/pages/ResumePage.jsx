@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { DeleteAlertModal } from '../components/DeleteAlertModal';
 import {
   Upload,
@@ -40,6 +41,7 @@ const COMMON_SKILLS = [
 ];
 
 export const ResumePage = () => {
+  const { user } = useAuth();
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -60,10 +62,10 @@ export const ResumePage = () => {
     onConfirm: null,
   });
 
-  // Comprehensive candidate profile state
-  const [parsedData, setParsedData] = useState({
-    fullName: '',
-    email: '',
+  // Comprehensive candidate profile state (initialized with logged-in user identity)
+  const [parsedData, setParsedData] = useState(() => ({
+    fullName: user?.name || '',
+    email: user?.email || '',
     phone: '',
     currentRole: '',
     experienceYears: 0,
@@ -74,7 +76,7 @@ export const ResumePage = () => {
     links: { github: '', linkedin: '', portfolio: '', resume: '' },
     keyProjects: [],
     education: [],
-  });
+  }));
 
   const [newSkill, setNewSkill] = useState('');
   const [projectTechInputs, setProjectTechInputs] = useState({});
@@ -87,8 +89,8 @@ export const ResumePage = () => {
         if (res.data.data.parsedData) {
           const pd = res.data.data.parsedData;
           setParsedData({
-            fullName: pd.fullName || '',
-            email: pd.email || '',
+            fullName: pd.fullName || user?.name || '',
+            email: pd.email || user?.email || '',
             phone: pd.phone || '',
             currentRole: pd.currentRole || '',
             experienceYears: pd.experienceYears !== undefined ? pd.experienceYears : 0,
@@ -108,8 +110,14 @@ export const ResumePage = () => {
         }
       }
     } catch (err) {
-      // No resume uploaded yet - defaults to clean manual entry state
-      console.log('No existing resume found; manual entry ready.');
+      // No resume uploaded yet - prefill with candidate's registered name and email
+      console.log('No existing resume found; manual entry ready for user:', user?.email);
+      setResume(null);
+      setParsedData((prev) => ({
+        ...prev,
+        fullName: prev.fullName || user?.name || '',
+        email: prev.email || user?.email || '',
+      }));
     } finally {
       setLoading(false);
     }
@@ -117,7 +125,7 @@ export const ResumePage = () => {
 
   useEffect(() => {
     fetchResume();
-  }, []);
+  }, [user?._id]);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -570,7 +578,7 @@ export const ResumePage = () => {
               </label>
               <input
                 type="text"
-                placeholder="e.g. Alex Kumar"
+                placeholder="e.g. Alex Morgan"
                 value={parsedData.fullName}
                 onChange={(e) => setParsedData({ ...parsedData, fullName: e.target.value })}
                 className="w-full px-3 py-1.5 rounded-lg saas-input text-xs"
@@ -583,7 +591,7 @@ export const ResumePage = () => {
               </label>
               <input
                 type="email"
-                placeholder="alex@gmail.com"
+                placeholder="alex.morgan@example.com"
                 value={parsedData.email}
                 onChange={(e) => setParsedData({ ...parsedData, email: e.target.value })}
                 className="w-full px-3 py-1.5 rounded-lg saas-input text-xs"
@@ -953,7 +961,7 @@ export const ResumePage = () => {
                       </label>
                       <input
                         type="text"
-                        placeholder="e.g. School SaaS Management System"
+                        placeholder="e.g. Distributed Asynchronous Task Queue"
                         value={proj.title || ''}
                         onChange={(e) => handleUpdateProject(pIdx, 'title', e.target.value)}
                         className="w-full px-3 py-1.5 rounded-lg saas-input text-xs"
@@ -980,7 +988,7 @@ export const ResumePage = () => {
                     </label>
                     <textarea
                       rows={2}
-                      placeholder="What does this project do? e.g. Full-stack platform featuring RBAC, teacher dashboards, and automated report cards."
+                      placeholder="What does this project do? e.g. High-throughput distributed task worker with Redis persistence and WebSocket telemetry."
                       value={proj.description || ''}
                       onChange={(e) => handleUpdateProject(pIdx, 'description', e.target.value)}
                       className="w-full px-3 py-1.5 rounded-lg saas-input text-xs leading-relaxed"
@@ -1115,7 +1123,7 @@ export const ResumePage = () => {
                       <label className="block text-slate-600 dark:text-zinc-400 font-medium mb-1">Institution / University</label>
                       <input
                         type="text"
-                        placeholder="e.g. Chartered Institute of Technology"
+                        placeholder="e.g. State University / Stanford / MIT"
                         value={edu.institution || ''}
                         onChange={(e) => handleUpdateEducation(eIdx, 'institution', e.target.value)}
                         className="w-full px-3 py-1.5 rounded-lg saas-input text-xs"

@@ -355,7 +355,7 @@ ${rawText.slice(0, 10000)}
 """
 
 CRITICAL INSTRUCTIONS:
-- fullName: Extract the candidate's real personal name (e.g. "CHETAN KUMAR"), NOT location or phone or headline.
+- fullName: Extract the candidate's real personal name (e.g. "Alex Morgan"), NOT location or phone or headline.
 - currentRole: Extract the candidate's actual engineering role/title (e.g. "Full-Stack Developer", "MERN Stack Developer", "Software Engineer"). NEVER put location or availability in currentRole.
 - experienceYears: Estimate total professional/internship experience in whole years (0 for freshers).
 - experienceMonths: Remaining months of experience (0 to 11).
@@ -379,10 +379,10 @@ Output MUST be a valid JSON object matching this schema exactly:
   "skills": ["JavaScript", "React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
   "keyProjects": [
     {
-      "title": "School SaaS Platform",
-      "description": "Multi-role educational management platform supporting Admin, Teacher, and Student portals.",
+      "title": "Cloud Distributed Task Queue",
+      "description": "High-throughput asynchronous task queue with Redis persistence and WebSocket telemetry.",
       "techStack": ["React.js", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
-      "highlights": "Implemented role-based access control (RBAC) and secured API endpoints.",
+      "highlights": "Architected worker pipelines reducing job processing latency by 45%.",
       "link": ""
     }
   ],
@@ -394,7 +394,7 @@ Output MUST be a valid JSON object matching this schema exactly:
   "education": [
     {
       "degree": "Bachelor of Technology - Computer Science",
-      "institution": "Chartered Institute of Technology",
+      "institution": "State University / College of Engineering",
       "year": "2021 - 2025"
     }
   ]
